@@ -423,7 +423,7 @@ function phase_images(?int $limit): void
 $doSitemap = isset($args['sitemap']) || isset($args['all']);
 $doLists = isset($args['lists']) || isset($args['all']);
 $doDetails = isset($args['details']) || isset($args['all']);
-$doImages = isset($args['images']);
+$doImages = isset($args['images']) || isset($args['all']);
 
 $limitPages = isset($args['limit-pages']) ? (int)$args['limit-pages'] : null;
 $limitDetails = isset($args['limit-details']) ? (int)$args['limit-details'] : null;
