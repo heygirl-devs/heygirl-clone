@@ -351,13 +351,15 @@ function dl_files_parallel(array $paths, int $concurrency = 6): array
         curl_multi_add_handle($mh, $ch);
     };
 
-    $runBatch = static function () use ($mh, &$map, &$ok, &$fail): void {
+    $runBatch = static function (int $concurrency) use ($mh, &$map, &$ok, &$fail): void {
         do {
             $status = curl_multi_exec($mh, $running);
             if ($running) {
                 curl_multi_select($mh, 0.2);
             }
         } while ($running > 0);
+        $batchFail = 0;
+        $batchTotal = count($map);
         foreach ($map as $info) {
             $body = curl_multi_getcontent($info['ch']);
             $err = curl_error($info['ch']);
@@ -373,18 +375,25 @@ function dl_files_parallel(array $paths, int $concurrency = 6): array
                 $ok++;
             } else {
                 $fail[] = $info['path'];
+                $batchFail++;
             }
         }
         $map = [];
+        // backoff thích ứng: tỷ lệ lỗi cao -> server đang throttle -> nghỉ lâu hơn
+        if ($batchFail > 0 && $batchTotal > 0 && $batchFail / $batchTotal >= 0.5) {
+            sleep(5);
+        } elseif ($batchFail > 0) {
+            usleep(300_000);
+        }
     };
 
     foreach ($todo as $p => $dest) {
         $add($p, $dest);
         if (count($map) >= $concurrency) {
-            $runBatch();
+            $runBatch($concurrency);
         }
     }
-    $runBatch();
+    $runBatch($concurrency);
     curl_multi_close($mh);
     return ['ok' => $ok, 'fail' => $fail];
 }

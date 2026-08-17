@@ -37,6 +37,14 @@ php tools/crawl.php --all        # chạy cả 4 phase
 
 Crawl **resumable**: trạng thái lưu tại `data/crawl_state.json`; ảnh đã có thì bỏ qua; detail chỉ chạy cho hồ sơ chưa có `crawled_at`.
 
+## Số liệu hiện tại (lần crawl gần nhất)
+
+- **5.061 hồ sơ** (100% đã crawl chi tiết: SĐT, địa chỉ, mô tả, bảng thuộc tính, gallery)
+- **65.186 file ảnh** (~1.2 GB) tại `public/uploads/products/public/`
+- Phân bố khớp site gốc: Sài Gòn 2.254, Bình Dương 490, Hà Nội 468, Đồng Nai 255, Đà Nẵng 215…
+- 11 file ảnh không tải được (đã bị xoá khỏi site gốc) — bỏ qua
+- Lưu ý: server gốc throttle tải hàng loạt → crawler đã có backoff thích ứng; nếu chạy lại, chạy `--images` 2 lần để bù file rớt
+
 Ghi chú kỹ thuật từ site gốc:
 
 - Site gốc là **PHP render server-side** (template Blade/Laravel), không phải SPA → không có source map. Giao diện dựng lại từ HTML/CSS quan sát được.
