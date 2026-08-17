@@ -1,0 +1,1738 @@
+        @font-face { font-family:'BlackRose'; src:url('/fonts/black-rose.woff2') format('woff2'),url('/fonts/black-rose.woff') format('woff'),url('/fonts/black-rose.ttf') format('truetype'); font-display:swap; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg:#0f0f10; --bg2:#161617; --bg3:#1e1e1f; --nav:#1a1b1c;
+            --border:#3e4042; --border2:#3a3b3c; --text:#e4e6eb;
+            --text2:#b0b3b8; --text3:#909192; --blue:#4a9eff; --blue2:#1877f2;
+            --green:#42b72a; --red:#f02849; --yellow:#e7a400; --orange:#e68900;
+        }
+        body { background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; line-height:1.34; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+        h1,h2,h3,h4 { font-weight:700; line-height:1.25; letter-spacing:-0.01em; }
+        input,textarea,select { font-family:inherit; font-size:16px!important; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:10px 14px; width:100%; outline:none; transition:border-color 0.2s; }
+        button { font-family:inherit; }
+        input:focus,textarea:focus,select:focus { border-color:var(--blue); box-shadow:0 0 0 2px rgba(45,136,255,0.2); }
+        input::placeholder,textarea::placeholder { color:var(--text3); }
+        .card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,0.3); }
+        .btn-primary { background:var(--blue); color:#fff; border-radius:6px; padding:10px 20px; font-weight:700; font-size:15px; border:none; cursor:pointer; display:block; width:100%; text-align:center; transition:background 0.2s; }
+        .btn-primary:hover { background:var(--blue2); }
+        .btn-green { background:var(--green); color:#fff; border-radius:6px; padding:12px 20px; font-weight:700; font-size:15px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; width:100%; text-decoration:none; }
+        .btn-outline { border:1px solid var(--border); background:var(--bg3); color:var(--text); border-radius:6px; padding:8px 14px; font-size:13px; cursor:pointer; font-weight:600; }
+        .chip { border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:var(--text2); border-radius:10px; padding:9px 15px; font-size:12.5px; font-weight:600; letter-spacing:0.2px; white-space:nowrap; display:inline-block; transition:all 0.16s ease; cursor:pointer; }
+        .chip:hover { background:rgba(45,136,255,0.12); border-color:rgba(45,136,255,0.5); color:var(--text); }
+        .chip.active { background:#2d88ff; color:#fff; border-color:#2d88ff; box-shadow:0 2px 8px rgba(45,136,255,0.4); }
+        .chip.active:hover { background:#2d88ff; border-color:#2d88ff; color:#fff; }
+        .price { color:var(--text); font-weight:700; }
+        .label { color:var(--text2); font-size:12px; display:block; margin-bottom:4px; font-weight:500; }
+        .stat { color:var(--text3); font-size:12px; }
+        .app-header { position:sticky; top:0; z-index:50; transition:transform 0.3s ease; will-change:transform; }
+        .app-header.nav-hide { transform:translateY(-100%); }
+        .top-nav { background:var(--nav); padding:0 16px; display:flex; align-items:center; justify-content:space-between; height:62px; position:relative; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .logo { font-family:'BlackRose', cursive; font-size:46px; font-weight:400; color:var(--red); letter-spacing:0; text-decoration:none; white-space:nowrap; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); line-height:1; }
+        @media (max-width:768px){ .logo { font-size:36px; } }
+        @media (max-width:360px){ .logo { font-size:30px; } }
+
+        .user-menu{position:relative}
+        .key-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;border-radius:8px}
+        .key-btn:hover{background:var(--bg3)}
+        .user-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.45);padding:6px;z-index:100;display:none}
+        .user-dropdown.open{display:block}
+        .ud-head{display:flex;align-items:center;gap:10px;padding:10px 12px;text-decoration:none;border-bottom:1px solid var(--border);margin-bottom:4px}
+        .ud-ava{width:38px;height:38px;border-radius:20%;object-fit:cover;flex-shrink:0}
+        .av-ring > .ud-ava{width:100%;height:100%}
+        .ud-ava-emoji{display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--bg3);line-height:1}
+        .ud-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .ud-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;font-size:14px;color:var(--text);text-decoration:none;background:none;border:none;cursor:pointer;border-radius:8px;text-align:left}
+        .ud-item:hover{background:var(--bg3)}
+        .ud-item svg{color:var(--text2);flex-shrink:0}
+        .ud-logout-form{margin:0;border-top:1px solid var(--border);margin-top:4px;padding-top:4px}
+        .ud-logout{color:var(--red)}
+        .ud-logout svg{color:var(--red)}
+        .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--nav); border-top:1px solid var(--border); display:flex; z-index:50; box-shadow:0 -2px 4px rgba(0,0,0,0.3); transition:transform 0.25s ease; padding-bottom:env(safe-area-inset-bottom,0); }
+        .bottom-nav a { flex:1; display:flex; flex-direction:column; align-items:center; padding:8px 0; min-height:52px; justify-content:center; color:var(--text); text-decoration:none; font-size:11px; gap:3px; transition:color 0.15s; border-top:2px solid transparent; }
+        .bottom-nav a.active { color:#4d9fff; border-top-color:#4d9fff; }
+        .bottom-nav .icon { font-size:17px; }
+        .nav-plus { background:var(--blue); color:#fff; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+        .alert-success { background:#1c3a1c; border:1px solid #2d5a2d; color:#6fcf6f; padding:12px 16px; border-radius:8px; font-size:14px; margin-bottom:12px; }
+        .alert-error { background:#3a1c1c; border:1px solid #5a2d2d; color:#ff6b6b; padding:12px 16px; border-radius:8px; font-size:14px; margin-bottom:12px; }
+        /* Toast noi - tu an, khong day trang */
+        .toast { position:fixed; top:18px; left:50%; transform:translateX(-50%) translateY(-24px); z-index:99999; display:flex; align-items:center; gap:9px; max-width:90%; padding:12px 18px; border-radius:12px; font-size:14px; font-weight:500; box-shadow:0 8px 30px rgba(0,0,0,0.5); opacity:0; pointer-events:none; transition:opacity .28s ease, transform .28s cubic-bezier(.2,.9,.3,1.2); white-space:normal; line-height:1.4; }
+        .toast-show { opacity:1; transform:translateX(-50%) translateY(0); }
+        .toast-success { background:#1c3a1c; border:1px solid #2d5a2d; color:#8fe08f; }
+        .toast-error { background:#3a1c1c; border:1px solid #6a2d2d; color:#ff8585; }
+        .product-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+        .kvw{display:block}
+        .fh-hand{display:inline-block;font-size:16px;line-height:1;margin-right:2px;animation:fhHand 1.1s ease-in-out infinite}
+        @keyframes fhHand{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+        @media (prefers-reduced-motion: reduce){ .fh-hand{animation:none} }
+        .kvw-side{margin-top:28px}
+        @media (min-width:1100px){ .kvw{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:20px;align-items:start} .kvw-side{margin-top:46px} }
+        .product-card { background:var(--bg2); border-radius:0; overflow:hidden; text-decoration:none; display:block; transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s; box-shadow:0 1px 3px rgba(0,0,0,0.3); content-visibility:auto; contain-intrinsic-size:auto 300px; }
+        .product-card:hover { transform:translateY(-5px); box-shadow:0 10px 26px rgba(0,0,0,0.45); }
+        .product-thumb { aspect-ratio:6/9; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:52px; overflow:hidden; }
+        .product-card img { transition:filter .3s ease; }
+        .product-card:hover img { filter:brightness(1.1); }
+        .product-card.reveal { opacity:1; transform:none; }
+        .product-card.reveal.shown { opacity:1; transform:none; }
+        @keyframes skel-shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+        .product-card .img-wrap { position:relative; aspect-ratio:6/9; background:linear-gradient(90deg,var(--bg3) 25%,#454647 50%,var(--bg3) 75%); background-size:200% 100%; animation:skel-shimmer 1.4s infinite; }
+        .product-card .img-wrap img { position:absolute; inset:0; opacity:1; }
+        .product-card .img-wrap img.loaded { opacity:1; }
+    .product-card .img-wrap:has(img.loaded){ animation:none; background:var(--bg3); }
+        @media(hover:none){
+            .product-card:active { transform:scale(0.97); transition:transform .1s ease; }
+            .product-card:hover { transform:none; box-shadow:0 1px 3px rgba(0,0,0,0.3); border-color:var(--border); }
+            .product-card:hover img { filter:none; }
+        }
+        .product-info { padding:4px 12px 6px; }
+        @keyframes hot-pulse { 0%,100%{box-shadow:0 2px 5px rgba(0,0,0,0.4),0 0 0 rgba(255,59,59,0)} 50%{box-shadow:0 2px 5px rgba(0,0,0,0.4),0 0 12px rgba(255,59,59,0.6)} }
+        .hot-ribbon { position:absolute; top:8px; left:8px; width:26px; height:26px; font-size:0; background:url('/images/hot-badge.webp') center/contain no-repeat; z-index:3; }
+        .product-name { color:var(--text); font-size:14px; font-weight:500; line-height:1.4; letter-spacing:-0.01em; white-space:nowrap; overflow:hidden; text-overflow:clip; min-height:1.4em; margin-bottom:2px; }
+        .product-price { color:var(--text); font-size:15px; font-weight:700; }
+        .product-meta { display:flex; justify-content:space-between; margin-top:4px; }
+        .product-ncc { color:var(--blue); font-size:11px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .sort-scroll { display:flex; flex-wrap:nowrap; gap:7px; background:var(--nav); padding:8px 12px 10px; overflow-x:auto; -webkit-overflow-scrolling:touch; border-bottom:1px solid var(--border); box-shadow:0 3px 6px rgba(0,0,0,0.22); }
+        .sort-scroll::-webkit-scrollbar { display:none; }
+        .form-section { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:12px; box-shadow:0 1px 2px rgba(0,0,0,0.3); }
+        .form-label { color:var(--text2); font-size:13px; font-weight:600; margin-bottom:6px; display:block; }
+        .form-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+        .info-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:12px; }
+        .info-cell { background:var(--bg3); border-radius:8px; padding:10px 12px; }
+        .section-title { font-size:17px; font-weight:700; color:var(--text); margin-bottom:12px; letter-spacing:-0.01em; }
+        .topic-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:14px; margin-bottom:8px; text-decoration:none; display:block; transition:background 0.15s; }
+        .topic-card:hover { background:#2e2f30; }
+        .avatar { width:36px; height:36px; border-radius:20%; overflow:hidden; background:var(--blue); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; text-transform:uppercase; }
+    /* ===== Khung vien avatar theo cap sao ===== */
+    .av-ring{position:relative;display:inline-flex;width:100%;height:100%;border-radius:20%;padding:2px;box-sizing:border-box;background:linear-gradient(135deg,var(--ring1),var(--ring2))}
+    .av-ring > img, .av-ring > span{width:100%;height:100%;border-radius:20%;display:block;box-sizing:border-box;border:1.5px solid var(--nav)}
+    .av-ring-2{box-shadow:0 0 5px rgba(217,119,6,0.5)}
+    .av-ring-3{box-shadow:0 0 6px rgba(13,148,136,0.55)}
+    .av-ring-4{box-shadow:0 0 8px rgba(124,58,237,0.6)}
+    .av-ring-5{box-shadow:0 0 9px rgba(225,29,72,0.65)}
+    @keyframes avRingPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
+    .av-ring-anim{animation:avRingPulse 2s ease-in-out infinite}
+        .ledger-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border2); }
+        .ledger-icon { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+        .ledger-in { background:#1c3a1c; color:var(--green); }
+        .ledger-out { background:#3a1c1c; color:var(--red); }
+        .ledger-gift { background:#3a3a1c; color:var(--yellow); }
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:var(--bg); }
+        ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+        a { color:var(--blue); }
+        @keyframes chipPulse { 0%{transform:scale(1)} 35%{transform:scale(1.09)} 100%{transform:scale(1)} }
+        @keyframes chipGlow { 0%{box-shadow:0 0 0 0 rgba(45,136,255,0.55)} 100%{box-shadow:0 0 0 9px rgba(45,136,255,0)} }
+        .chip.active { animation:chipPulse 0.5s ease-out 1, chipGlow 0.6s ease-out 1; }
+        @keyframes cardIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+        .product-grid > a { animation:cardIn 0.4s ease-out both; }
+        .product-grid > a:nth-child(1){animation-delay:0s}
+        .product-grid > a:nth-child(2){animation-delay:.04s}
+        .product-grid > a:nth-child(3){animation-delay:.08s}
+        .product-grid > a:nth-child(4){animation-delay:.12s}
+        .product-grid > a:nth-child(5){animation-delay:.16s}
+        .product-grid > a:nth-child(6){animation-delay:.20s}
+        .product-grid > a:nth-child(7){animation-delay:.24s}
+        .product-grid > a:nth-child(8){animation-delay:.28s}
+        @media (prefers-reduced-motion: reduce) { .chip.active,.product-grid > a { animation:none } }
+        .page-main { max-width:640px; margin:0 auto; padding:12px 10px 80px; }
+        @media (min-width:768px) {
+            .page-main { max-width:720px; padding:16px 16px 90px; }
+            .product-grid { grid-template-columns:repeat(3,1fr); gap:10px; }
+        }
+        @media (min-width:1024px) {
+            .page-main { max-width:960px; padding:20px 20px 96px; }
+            .product-grid { grid-template-columns:repeat(4,1fr); gap:12px; }
+        }
+        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .lvl-nav-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--text2);text-decoration:none;font-weight:600;padding:6px 10px;border-radius:8px;line-height:1;white-space:nowrap;transition:color .15s,background .15s;z-index:2}
+    .lvl-nav-link:hover{color:var(--text);background:var(--bg3)}
+    .lvl-nav-link.active{color:#4d9fff}
+    .lvl-nav-link .lnl-star{font-size:15px;line-height:1}
+    @media (max-width:480px){ .lvl-nav-link .lnl-text{display:none} .lvl-nav-link{padding:6px} }
+        .gami-wrap{position:relative;z-index:60}
+        .app-header .gami-wrap{position:absolute;left:10px;top:50%;transform:translateY(-50%)}
+        .gami-btn{position:relative;display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:800;color:#fff;background:#e8365f;border:none;border-radius:8px;padding:7px 12px;cursor:pointer;line-height:1;white-space:nowrap;box-shadow:0 2px 8px rgba(232,54,95,.4);transition:transform .15s,box-shadow .15s;overflow:hidden}
+        .gami-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(232,54,95,.6)}
+        .gami-btn:active{transform:translateY(0)}
+        .gami-btn .gb-ico{font-size:13px;line-height:1}
+        @media (max-width:520px){ .gami-btn{font-size:12px;padding:6px 9px;gap:4px} .gami-btn .gb-ico{font-size:12px} }
+        .gami-btn::after{content:"";position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-150%) skewX(-20deg)}
+        @media (prefers-reduced-motion:no-preference){ .gami-btn::after{animation:gamiShine 3.2s ease-in-out infinite} }
+        @keyframes gamiShine{0%,60%{transform:translateX(-150%) skewX(-20deg)}100%{transform:translateX(325%) skewX(-20deg)}}
+        .gami-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:230px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+        .gami-menu.open{display:block}
+        .gami-item{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--text);text-decoration:none;padding:11px 12px;border-radius:9px;transition:background .12s}
+        .gami-item:hover{background:var(--bg3)}
+        .gami-item.active{color:#e8365f}
+        .gami-item .gi-ico{font-size:16px;line-height:1}
+</header>
+
+<main class="page-main">
+    
+<nav class="fh-breadcrumb" aria-label="breadcrumb" style="font-size:13px;margin-bottom:12px;display:flex;flex-wrap:wrap;align-items:center;gap:4px">
+    <a href="/" style="color:var(--text2);text-decoration:none">Trang chủ</a>
+    <span style="color:var(--text3)">&rsaquo;</span>
+    <a href="/gai-goi/binh-duong" style="color:#1877f2;text-decoration:none;font-weight:600">Bình Dương</a>
+        <span style="color:var(--text3)">&rsaquo;</span>
+    <a href="/gai-goi/binh-duong/di-an" style="color:#1877f2;text-decoration:none;font-weight:600">Dĩ An</a>
+    </nav>
+<script type="application/ld+json">{"<?php $__contextArgs = [];\nif (context()->has($__contextArgs[0])) :\nif (isset($value)) { $__contextPrevious[] = $value; }\n$value = context()->get($__contextArgs[0]); ?>":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Trang chủ","item":"https://gaigu2.fit"},{"@type":"ListItem","position":2,"name":"Bình Dương","item":"https://gaigu2.fit/gai-goi/binh-duong"},{"@type":"ListItem","position":3,"name":"Dĩ An","item":"https://gaigu2.fit/gai-goi/binh-duong/di-an"}]}</script>
+
+<h1 style="font-size:26px;font-weight:800;line-height:1.3;margin-bottom:6px;color:var(--text)">💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm </h1>
+<div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
+    <span style="display:flex;align-items:center;gap:5px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#facc15" style="display:block;flex-shrink:0"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg>
+        <span style="color:#facc15;font-size:15px;font-weight:700">3.0</span>
+        <span style="color:var(--text3);font-size:13px">(2 đánh giá)</span>
+    </span>
+    <span style="margin-left:auto;display:flex;align-items:center;gap:5px;color:var(--text2);font-size:13px;font-weight:600">
+        <svg width="15" height="15" viewBox="0 0 24 24" style="display:block"><path d="M12 5C6 5 1.7 9.4 1 12c.7 2.6 5 7 11 7s10.3-4.4 11-7c-.7-2.6-5-7-11-7z" fill="currentColor"/><circle cx="12" cy="12" r="3.2" fill="var(--bg)"/></svg>9.986
+    </span>
+    <button id="fav-btn" onclick="toggleFav()" class="fav-btn " title="Yêu thích" aria-label="Yêu thích">
+        <span class="fav-glow"></span>
+        <svg id="fav-icon" width="19" height="19" viewBox="0 0 24 24" style="display:block;position:relative;z-index:1" fill="none" stroke="var(--text2)" stroke-width="2.2"><path d="M12 20.3c-.4 0-.8-.15-1.1-.42C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.9 11.38-.3.27-.7.42-1.1.42z"/></svg>
+    </button>
+    <button id="share-btn" onclick="shareProduct()" class="fav-btn" title="Chia sẻ" aria-label="Chia sẻ" style="margin-left:6px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;position:relative;z-index:1"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+    </button>
+</div>
+
+<div class="card" style="margin-bottom:12px;overflow:hidden;border-radius:16px;border:none">
+    
+                <div id="album-zone">
+    @media (min-width:768px){
+        #album-zone{display:flex;flex-direction:row-reverse;justify-content:center;gap:12px;align-items:flex-start}
+        #album-wrap{max-width:420px;flex:0 0 420px;border-radius:12px}
+        #album-thumbs{flex-direction:column;width:66px;flex:0 0 66px;max-height:630px;overflow-y:auto;overflow-x:hidden}
+    }
+        <div id="album-track" style="display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none">
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b3107be4_1786456881.webp" data-full="/uploads/products/public/6a7b2b3107be4_1786456881.webp" srcset="/uploads/products/public/thumb_md_6a7b2b3107be4_1786456881.webp 460w, /uploads/products/public/6a7b2b3107be4_1786456881.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="eager" fetchpriority="high" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b3107be4_1786456881.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b3030dc5_1786456880.webp" data-full="/uploads/products/public/6a7b2b3030dc5_1786456880.webp" srcset="/uploads/products/public/thumb_md_6a7b2b3030dc5_1786456880.webp 460w, /uploads/products/public/6a7b2b3030dc5_1786456880.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b3030dc5_1786456880.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b30999aa_1786456880.webp" data-full="/uploads/products/public/6a7b2b30999aa_1786456880.webp" srcset="/uploads/products/public/thumb_md_6a7b2b30999aa_1786456880.webp 460w, /uploads/products/public/6a7b2b30999aa_1786456880.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b30999aa_1786456880.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b315d073_1786456881.webp" data-full="/uploads/products/public/6a7b2b315d073_1786456881.webp" srcset="/uploads/products/public/thumb_md_6a7b2b315d073_1786456881.webp 460w, /uploads/products/public/6a7b2b315d073_1786456881.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b315d073_1786456881.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b31c9b14_1786456881.webp" data-full="/uploads/products/public/6a7b2b31c9b14_1786456881.webp" srcset="/uploads/products/public/thumb_md_6a7b2b31c9b14_1786456881.webp 460w, /uploads/products/public/6a7b2b31c9b14_1786456881.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b31c9b14_1786456881.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b3230809_1786456882.webp" data-full="/uploads/products/public/6a7b2b3230809_1786456882.webp" srcset="/uploads/products/public/thumb_md_6a7b2b3230809_1786456882.webp 460w, /uploads/products/public/6a7b2b3230809_1786456882.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b3230809_1786456882.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b32a0457_1786456882.webp" data-full="/uploads/products/public/6a7b2b32a0457_1786456882.webp" srcset="/uploads/products/public/thumb_md_6a7b2b32a0457_1786456882.webp 460w, /uploads/products/public/6a7b2b32a0457_1786456882.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b32a0457_1786456882.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                        <div style="flex:0 0 100%;width:100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always">
+                                <img src="/uploads/products/public/thumb_md_6a7b2b33036a0_1786456883.webp" data-full="/uploads/products/public/6a7b2b33036a0_1786456883.webp" srcset="/uploads/products/public/thumb_md_6a7b2b33036a0_1786456883.webp 460w, /uploads/products/public/6a7b2b33036a0_1786456883.webp 800w" sizes="(max-width:768px) 100vw, 420px" alt="💥HOT💥(Gái Non)Hạnh Nguyên Baby-Em Gái Non,Ngoan,Xinh,Dâm" loading="lazy" decoding="async"
+                     onclick="openLightbox('/uploads/products/public/6a7b2b33036a0_1786456883.webp')"
+                     style="width:100%;height:100%;object-fit:cover;cursor:zoom-in">
+            </div>
+                    </div>
+                <button onclick="albumPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2">‹</button>
+        <button onclick="albumNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2">›</button>
+        <div id="album-dots" style="position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:2">
+                        <span class="album-dot" onclick="albumGo(0)" style="width:7px;height:7px;border-radius:50%;background:#fff;cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(1)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(2)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(3)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(4)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(5)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(6)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                        <span class="album-dot" onclick="albumGo(7)" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:background 0.2s"></span>
+                    </div>
+                <div style="position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,.96);color:#c1121f;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;z-index:2;display:flex;align-items:center;gap:4px;pointer-events:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="#c1121f"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"/><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg>8 Ảnh</div>
+                                                                    </div>
+        <div id="album-thumbs" style="display:flex;gap:7px;overflow-x:auto;padding:8px 2px 2px;scrollbar-width:none">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b3107be4_1786456881.webp" alt="thumb 1" loading="lazy" decoding="async" onclick="albumGo(0)"
+             class="album-thumb" data-idx="0"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid var(--red);opacity:1;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b3030dc5_1786456880.webp" alt="thumb 2" loading="lazy" decoding="async" onclick="albumGo(1)"
+             class="album-thumb" data-idx="1"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b30999aa_1786456880.webp" alt="thumb 3" loading="lazy" decoding="async" onclick="albumGo(2)"
+             class="album-thumb" data-idx="2"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b315d073_1786456881.webp" alt="thumb 4" loading="lazy" decoding="async" onclick="albumGo(3)"
+             class="album-thumb" data-idx="3"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b31c9b14_1786456881.webp" alt="thumb 5" loading="lazy" decoding="async" onclick="albumGo(4)"
+             class="album-thumb" data-idx="4"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b3230809_1786456882.webp" alt="thumb 6" loading="lazy" decoding="async" onclick="albumGo(5)"
+             class="album-thumb" data-idx="5"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b32a0457_1786456882.webp" alt="thumb 7" loading="lazy" decoding="async" onclick="albumGo(6)"
+             class="album-thumb" data-idx="6"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+                        <img src="/uploads/products/public/thumb_xs_6a7b2b33036a0_1786456883.webp" alt="thumb 8" loading="lazy" decoding="async" onclick="albumGo(7)"
+             class="album-thumb" data-idx="7"
+             style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">
+            </div>
+        </div>
+    <script>
+    (function(){
+        const total = 8;
+        let cur = 0, startX = 0, dragging = false;
+        const track = document.getElementById('album-track');
+        const wrap  = document.getElementById('album-wrap');
+
+        function update(){
+            const w = track.clientWidth || 1;
+            cur = Math.round(track.scrollLeft / w);
+            if (cur < 0) cur = 0;
+            if (cur > total - 1) cur = total - 1;
+            document.querySelectorAll('.album-dot').forEach((d,i) => {
+                d.style.background = i===cur ? '#fff' : 'rgba(255,255,255,0.4)';
+            });
+            const cc = null; // counter da thay bang badge tinh
+            if (cc) cc.textContent = (cur+1) + ' / ' + total;
+            document.querySelectorAll('.album-thumb').forEach((t,i) => {
+                t.style.borderColor = i===cur ? 'var(--red)' : 'transparent';
+                t.style.opacity = i===cur ? '1' : '0.6';
+            });
+        }
+        function goTo(n, instant){
+            const c2 = (n + total) % total;
+            if (instant) {
+                // Nhay tuc thi: tat ca snap + scroll-behavior smooth
+                track.style.scrollBehavior = 'auto';
+                track.style.scrollSnapType = 'none';
+                track.scrollLeft = c2 * track.clientWidth;
+                cur = c2;
+                update();
+                requestAnimationFrame(() => {
+                    track.style.scrollSnapType = 'x mandatory';
+                    track.style.scrollBehavior = 'smooth';
+                });
+            } else {
+                track.scrollTo({ left: c2 * track.clientWidth, behavior: 'smooth' });
+            }
+        }
+
+        window.albumNext = () => goTo(cur + 1);
+        window.albumPrev = () => goTo(cur - 1);
+        window.albumGo   = (n) => goTo(n, true);
+
+        let tmr;
+        track.addEventListener('scroll', () => { clearTimeout(tmr); tmr = setTimeout(update, 60); }, {passive:true});
+        update();
+    })();
+    </script>
+        
+    <div style="padding:16px">
+
+        
+
+
+
+<div style="position:relative;width:calc(100% + 32px);margin-left:-16px;margin-right:-16px;aspect-ratio:16/9;background:#000;border-radius:3px;overflow:hidden;margin-bottom:12px">
+    <video id="prodVideo" controls preload="none" playsinline poster=/uploads/videos/vid_20260811_211245_0ac25375.jpg
+           style="width:100%;height:100%;object-fit:contain;background:#000;display:block">
+            <source src="/uploads/videos/vid_20260811_211245_0ac25375.mp4" type="video/mp4">
+            Trình duyệt không hỗ trợ phát video.
+        </video>
+    </div>
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+</div>
+
+                <div style="margin-bottom:12px;display:flex;flex-direction:column;gap:7px">
+                        <div style="position:relative;border-radius:10px;padding:9px 12px;background:linear-gradient(135deg,rgba(45,136,255,0.18),rgba(45,136,255,0.06) 55%,rgba(124,58,237,0.1));border:1px solid rgba(96,165,250,0.4);box-shadow:0 3px 10px rgba(45,136,255,0.16),inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden">
+                <span style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:radial-gradient(circle,rgba(96,165,250,0.28),transparent 70%);pointer-events:none"></span>
+                <div style="display:flex;align-items:flex-start;gap:8px;position:relative">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                    <div style="font-size:12.5px;line-height:1.5;color:#cfe0f7;white-space:pre-line">Phát hiện tráo hàng, sai thông tin hãy giữ ảnh set kèo, ảnh phòng và viết đánh giá BQT sẽ xử lý. Trao đổi phản ánh anh em tạo nick rồi vào tài khoản sẽ thấy nhóm tele.</div>
+                </div>
+            </div>
+                    </div>
+        
+
+
+
+<div class="card" style="padding:16px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
+        <span style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px"><a href="/nguoi-dung/15279" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;vertical-align:middle"><span style="width:24px;height:24px;border-radius:20%;overflow:hidden;background:var(--blue);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><img src="/uploads/avatars/u15279_1784524407.webp" style="width:100%;height:100%;object-fit:cover" alt="FashionHub"></span><span style="font-size:14px;font-weight:600;color:var(--text)">Honghainhi9x</span></a></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border))"></div>
+        <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;letter-spacing:0.3px">Giới thiệu</div>
+        <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,var(--border))"></div>
+    </div>
+        <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:14px;white-space:pre-line">✨ Em gái baby – ngọt ngào nhưng đầy sức hút ✨
+Sở hữu gương mặt xinh xắn, trẻ trung cùng nét đáng yêu tự nhiên, em mang đến cảm giác vừa gần gũi vừa cuốn hút ngay từ ánh nhìn đầu tiên. Phong cách nữ tính, dịu dàng nhưng vẫn có chút tinh nghịch khiến tổng thể càng thêm nổi bật.
+V1 đầy đặn vừa phải, cân đối với vóc dáng; V2 thon gọn, tạo nên đường cong mềm mại và hài hòa. V3 tròn đầy tự nhiên, giúp dáng người nhìn cân đối và quyến rũ hơn khi diện những bộ trang phục ôm dáng.
+Không chỉ nổi bật ở ngoại hình, em còn ghi điểm bởi thần thái nhẹ nhàng, cách nói chuyện dễ thương và sự tự tin của một cô gái trưởng thành. Một vẻ đẹp ngọt ngào pha chút quyến rũ — không cần quá phô trương vẫn đủ khiến người đối diện khó rời mắt. 💕</p>
+            <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px">
+                        <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5a2 2 0 0 1 2-2h2M4 17v2a2 2 0 0 0 2 2h2M16 3h2a2 2 0 0 1 2 2v2M16 21h2a2 2 0 0 0 2-2v-2M7 12h10"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Nghệ danh</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600">🍑Bé Yêu🍑</span>
+            </div>
+                        <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.6l-9-9C12 2.2 11.5 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .5.2 1 .6 1.4l9 9c.4.4.9.6 1.4.6s1-.2 1.4-.6l7-7c.4-.4.6-.9.6-1.4s-.2-1-.6-1.4zM6.5 8C5.7 8 5 7.3 5 6.5S5.7 5 6.5 5 8 5.7 8 6.5 7.3 8 6.5 8z"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Giá</span>
+                <span style="color:var(--text);font-size:14px;font-weight:700">600K</span>
+            </div>
+                        <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1l-2.2 2.2z"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">SĐT</span>
+                <a href="tel:0832808542" style="color:#4caf50;font-size:14px;font-weight:600;text-decoration:none">0832808542</a>            </div>
+            <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 19 4"/><path d="m16 7 2.5 2.5"/><path d="m18.5 4.5 2.5 2.5"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Pass</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600">Lấy số từ <span style="color:#FFF44F;font-weight:700">gaigu2.fit</span> và <span style="color:#FFF44F;font-weight:700">gaito.fit</span></span>
+            </div>
+                                    <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Địa chỉ</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">Cầu vượt Ngã tư 550, Phường Dĩ An, Bình Dương</span>
+            </div>
+                                                
+            <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Năm sinh</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">2005</span>
+            </div>
+            <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4Z"/><path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Chiều cao</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">160 cm</span>
+            </div>
+            <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><path d="M6.5 8h11l1.8 10.5a2 2 0 0 1-2 2.5H6.7a2 2 0 0 1-2-2.5z"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Cân nặng</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">47 kg</span>
+            </div>
+            <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Số đo 3 vòng</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">80-68-80</span>
+            </div>
+                        <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Xuất xứ</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">Miền Nam</span>
+            </div>
+                                    <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Thời gian làm việc</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">24/24 còn nghe máy còn nhận khách</span>
+            </div>
+                                    <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2 14 8l6 .5-4.5 4 1.4 6L11.5 15 6 18.5 7.4 12.5 3 8.5 9 8z"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Dịch vụ</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">BJ - HJ - Hôn môi - Hôn vú - Bóp vú - Vét máng - Qua đêm - Tắm chung</span>
+            </div>
+                                    <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Từ chối</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600;word-break:break-word">Khách dùng ma túy.khách ngáo đá,bạo dâm,quá say,chưa đủ tuổi,trên 60t,khách hãm,bẩn,bệnh,khách đang chơi rút bao.</span>
+            </div>
+                                                <div class="attr-row" style="display:flex;align-items:center;gap:11px;padding:12px 14px">
+                <span style="color:var(--text3);display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3.5 3 8l9 12 9-12-4.5-4.5z"/><path d="M3 8h18"/></svg></span>
+                <span style="color:var(--text2);font-size:14px;min-width:120px;flex-shrink:0">Từ khóa</span>
+                <span style="color:var(--text);font-size:14px;font-weight:600">gái gú</span>
+            </div>
+            
+        </div>
+    <div style="display:flex;flex-direction:column;gap:10px;padding-top:14px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--text3);display:flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+            <span style="font-size:13px;color:var(--text3)">Ngày đăng: 11/08/2026</span>
+        </div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+            <span style="color:var(--text3);display:flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg></span>
+            <span style="font-size:13px;color:var(--text3)">Ngày xác thực gần nhất: 11/08/2026</span>
+        </div>
+                            </div>
+</div>
+
+
+<div style="position:relative;margin-bottom:12px;border-radius:12px;padding:16px 18px;background:linear-gradient(135deg,#3a2a0a 0%,#2a1f0a 55%,#241d0c 100%);border:1px solid #6b5418;box-shadow:0 2px 12px rgba(250,204,21,0.08);overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(250,204,21,0.18),transparent 70%);pointer-events:none"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#facc15" style="display:block;flex-shrink:0"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+        <span style="font-size:15px;font-weight:800;color:#facc15;letter-spacing:0.3px">ĐIỂM NỔI BẬT</span>
+    </div>
+    <p style="font-size:14px;color:#f5e6c8;line-height:1.55;margin:0">Gái non.ngực real.dáng đẹp(ảnh chụp từ điện thoại 100%)</p>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="card" style="padding:16px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border))"></div>
+        <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;letter-spacing:0.3px">Đánh giá (2)</div>
+        <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,var(--border))"></div>
+    </div>
+
+        <div style="display:flex;justify-content:center;margin-bottom:16px">
+        <button type="button" onclick="showLoginConfirm()" style="width:auto;padding:9px 24px;background:#0b63ce;color:#fff;border-radius:8px;font-size:13px;font-weight:700;border:none;cursor:pointer">
+            ✍️ Viết đánh giá
+        </button>
+    </div>
+    
+            <div class="rate-item" style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <div style="width:28px;height:28px;flex-shrink:0"><img src="/uploads/avatars/u27365_1786118943.webp" style="width:100%;height:100%;object-fit:cover;border-radius:20%" alt="FashionHub"></div>
+            <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px">
+                    <a href="/nguoi-dung/27365" style="color:inherit;text-decoration:none;font:inherit">checkerdian1</a>                     <span style="color:#facc15;font-weight:700;font-size:12px">★ 1/5</span>
+                </div>
+                                <div style="font-size:11px;color:var(--text3);margin-top:1px">16/08/2026</div>
+                            </div>
+                        <button type="button" onclick="toggleProof('rimg-10839', this)" data-n="4"
+                    style="flex-shrink:0;font-size:11px;padding:3px 9px;background:transparent;color:var(--blue);border:none;font-weight:600;cursor:pointer;white-space:nowrap">
+                Ẩn ảnh (4)
+            </button>
+                    </div>
+                <p style="font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.5">Tráo hàng đi vô là 1 con đĩ mập địt dơ, đã vậy kêu tao vào tắm rồi lẻn đi mất trong khi bắt đưa tiền trước. Tao cúng bay 600k</p>
+                                <div id="rimg-10839" class="proof-imgs" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                                    <img src="/uploads/ratings/thumb_sm_6a81d96035cae_1786894688.webp" srcset="/uploads/ratings/thumb_xs_6a81d96035cae_1786894688.webp 192w, /uploads/ratings/thumb_sm_6a81d96035cae_1786894688.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a81d96035cae_1786894688.webp" onclick="openLightbox('/uploads/ratings/6a81d96035cae_1786894688.webp', '#rimg-10839 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                                    <img src="/uploads/ratings/thumb_sm_6a81d95f70580_1786894687.webp" srcset="/uploads/ratings/thumb_xs_6a81d95f70580_1786894687.webp 192w, /uploads/ratings/thumb_sm_6a81d95f70580_1786894687.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a81d95f70580_1786894687.webp" onclick="openLightbox('/uploads/ratings/6a81d95f70580_1786894687.webp', '#rimg-10839 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                                    <img src="/uploads/ratings/thumb_sm_6a81d95fd7829_1786894687.webp" srcset="/uploads/ratings/thumb_xs_6a81d95fd7829_1786894687.webp 192w, /uploads/ratings/thumb_sm_6a81d95fd7829_1786894687.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a81d95fd7829_1786894687.webp" onclick="openLightbox('/uploads/ratings/6a81d95fd7829_1786894687.webp', '#rimg-10839 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                                    <img src="/uploads/ratings/thumb_sm_6a81d9609062a_1786894688.webp" srcset="/uploads/ratings/thumb_xs_6a81d9609062a_1786894688.webp 192w, /uploads/ratings/thumb_sm_6a81d9609062a_1786894688.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a81d9609062a_1786894688.webp" onclick="openLightbox('/uploads/ratings/6a81d9609062a_1786894688.webp', '#rimg-10839 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                    </div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <button type="button" onclick="reactBtn(this,'rating',10839,'like')" data-react="like" class="react-btn ">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+                <span class="rc">22</span>
+            </button>
+            <button type="button" onclick="reactBtn(this,'rating',10839,'dislike')" data-react="dislike" class="react-btn ">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block;transform:rotate(180deg)"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+                <span class="rc">1</span>
+            </button>
+            <button type="button" onclick="toggleReply('rate',10839)" class="reply-link">Trả lời</button>        </div>
+                        <form method="POST" action="/gai-goi/4953/reply" id="rf-rate-10839" class="reply-form" style="display:none">
+            <input type="hidden" name="_token" value="6CsaTcBOne2QP1nDkUIgzN2oMAhsdnA1VdANrruD" autocomplete="off">            <input type="hidden" name="parent_id" value="10839">
+            <input type="hidden" name="reply_type" value="rating">
+            <input type="text" name="content" placeholder="Viết trả lời..." required maxlength="1000" class="reply-input">
+            <label style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);cursor:pointer;white-space:nowrap;margin-right:4px"><input type="checkbox" name="is_anonymous" value="1" style="width:auto;margin:0">Ẩn danh</label>
+            <button type="submit" class="reply-send">Gửi</button>
+        </form>
+    </div>
+            <div class="rate-item" style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+            <div style="width:28px;height:28px;flex-shrink:0"><img src="/images/avatar-default.webp" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:20%"></div>
+            <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px">
+                    <a href="/nguoi-dung/33609" style="color:inherit;text-decoration:none;font:inherit">canhky</a>                     <span style="color:#facc15;font-weight:700;font-size:12px">★ 5/5</span>
+                </div>
+                                <div style="font-size:11px;color:var(--text3);margin-top:1px">14/08/2026</div>
+                            </div>
+                        <button type="button" onclick="toggleProof('rimg-10210', this)" data-n="3"
+                    style="flex-shrink:0;font-size:11px;padding:3px 9px;background:transparent;color:var(--blue);border:none;font-weight:600;cursor:pointer;white-space:nowrap">
+                Ẩn ảnh (3)
+            </button>
+                    </div>
+                <p style="font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.5">Vừa làm hiệp với em nó xong sướng tê con cặc .Em sỡ hữu body quá đẹp, chuẩn cả 3 vòng nhìn rất mát mắt</p>
+                                <div id="rimg-10210" class="proof-imgs" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                                    <img src="/uploads/ratings/thumb_sm_6a7e6efb16e86_1786670843.webp" srcset="/uploads/ratings/thumb_xs_6a7e6efb16e86_1786670843.webp 192w, /uploads/ratings/thumb_sm_6a7e6efb16e86_1786670843.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a7e6efb16e86_1786670843.webp" onclick="openLightbox('/uploads/ratings/6a7e6efb16e86_1786670843.webp', '#rimg-10210 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                                    <img src="/uploads/ratings/thumb_sm_6a7e6efb6319e_1786670843.webp" srcset="/uploads/ratings/thumb_xs_6a7e6efb6319e_1786670843.webp 192w, /uploads/ratings/thumb_sm_6a7e6efb6319e_1786670843.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a7e6efb6319e_1786670843.webp" onclick="openLightbox('/uploads/ratings/6a7e6efb6319e_1786670843.webp', '#rimg-10210 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                                    <img src="/uploads/ratings/thumb_sm_6a7e6efbb3e32_1786670843.webp" srcset="/uploads/ratings/thumb_xs_6a7e6efbb3e32_1786670843.webp 192w, /uploads/ratings/thumb_sm_6a7e6efbb3e32_1786670843.webp 250w" sizes="88px" alt="Ảnh đánh giá gái gọi" loading="lazy" decoding="async" data-full="/uploads/ratings/6a7e6efbb3e32_1786670843.webp" onclick="openLightbox('/uploads/ratings/6a7e6efbb3e32_1786670843.webp', '#rimg-10210 img')"
+                 style="width:88px;height:88px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border)" loading="lazy">
+                    </div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+            <button type="button" onclick="reactBtn(this,'rating',10210,'like')" data-react="like" class="react-btn ">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+                <span class="rc">5</span>
+            </button>
+            <button type="button" onclick="reactBtn(this,'rating',10210,'dislike')" data-react="dislike" class="react-btn ">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block;transform:rotate(180deg)"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+                <span class="rc">8</span>
+            </button>
+            <button type="button" onclick="toggleReply('rate',10210)" class="reply-link">Trả lời</button>        </div>
+                        <form method="POST" action="/gai-goi/4953/reply" id="rf-rate-10210" class="reply-form" style="display:none">
+            <input type="hidden" name="_token" value="6CsaTcBOne2QP1nDkUIgzN2oMAhsdnA1VdANrruD" autocomplete="off">            <input type="hidden" name="parent_id" value="10210">
+            <input type="hidden" name="reply_type" value="rating">
+            <input type="text" name="content" placeholder="Viết trả lời..." required maxlength="1000" class="reply-input">
+            <label style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);cursor:pointer;white-space:nowrap;margin-right:4px"><input type="checkbox" name="is_anonymous" value="1" style="width:auto;margin:0">Ẩn danh</label>
+            <button type="submit" class="reply-send">Gửi</button>
+        </form>
+    </div>
+        </div>
+
+
+<div class="card" style="padding:16px;margin-bottom:12px">
+    <div id="discuss" style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border))"></div>
+        <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;letter-spacing:0.3px">Bình luận</div>
+        <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,var(--border))"></div>
+    </div>
+
+            <div onclick="showLoginConfirm()" style="margin-bottom:16px;cursor:pointer">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--text3);font-size:14px">Viết bình luận...</div>
+        </div>
+    
+    <div id="comment-list">
+        <div class="cmt-item-wrap" style="">
+        <div class="cmt-item" style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:600;color:var(--text)"> <a href="/nguoi-dung/3641" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;vertical-align:middle"><span style="width:22px;height:22px;border-radius:20%;overflow:hidden;background:var(--blue);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><img src="/uploads/avatars/u3641_1783759110.webp" style="width:100%;height:100%;object-fit:cover" alt="FashionHub"></span><span style="font-size:13px;font-weight:600;color:var(--text)">Vuichoiquadi</span></a></span>
+        <span style="font-size:11px;color:var(--text3)">17/08/2026 09:59</span>
+    </div>
+    <p style="font-size:13px;color:var(--text2)">Nhìn cũng ngon lành mà ní</p>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+        <button type="button" onclick="reactBtn(this,'comment',47670,'like')" data-react="like" class="react-btn ">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+            <span class="rc">3</span>
+        </button>
+        <button type="button" onclick="reactBtn(this,'comment',47670,'dislike')" data-react="dislike" class="react-btn ">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block;transform:rotate(180deg)"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+            <span class="rc">0</span>
+        </button>
+        <button type="button" onclick="toggleReply('cmt',47670)" class="reply-link">Trả lời</button>            </div>
+            <form method="POST" action="/gai-goi/4953/reply" id="rf-cmt-47670" class="reply-form" style="display:none">
+        <input type="hidden" name="_token" value="6CsaTcBOne2QP1nDkUIgzN2oMAhsdnA1VdANrruD" autocomplete="off">        <input type="hidden" name="parent_id" value="47670">
+        <input type="hidden" name="reply_type" value="comment">
+        <input type="text" name="content" placeholder="Viết trả lời..." required maxlength="1000" class="reply-input">
+        <label style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);cursor:pointer;white-space:nowrap;margin-right:4px"><input type="checkbox" name="is_anonymous" value="1" style="width:auto;margin:0">Ẩn danh</label>
+        <button type="submit" class="reply-send">Gửi</button>
+    </form>
+</div>
+    </div>
+        <div class="cmt-item-wrap" style="">
+        <div class="cmt-item" style="border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:600;color:var(--text)"> <a href="/nguoi-dung/22935" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;vertical-align:middle"><span style="width:22px;height:22px;border-radius:20%;overflow:hidden;background:var(--blue);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><img src="/images/avatar-default.webp" alt="" style="width:100%;height:100%;object-fit:cover"></span><span style="font-size:13px;font-weight:600;color:var(--text)">Thichdickeck</span></a></span>
+        <span style="font-size:11px;color:var(--text3)">13/08/2026 22:05</span>
+    </div>
+    <p style="font-size:13px;color:var(--text2)">Em gái dáng đẹp.y hình.phục vụ tốt.không hối thúc.hôm này a ở P105.sẽ còn quay lại ủng hộ em</p>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+        <button type="button" onclick="reactBtn(this,'comment',44466,'like')" data-react="like" class="react-btn ">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+            <span class="rc">2</span>
+        </button>
+        <button type="button" onclick="reactBtn(this,'comment',44466,'dislike')" data-react="dislike" class="react-btn ">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:block;transform:rotate(180deg)"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+            <span class="rc">4</span>
+        </button>
+        <button type="button" onclick="toggleReply('cmt',44466)" class="reply-link">Trả lời</button>            </div>
+            <div class="reply-list" data-reply-box>
+                <div class="reply-item " style="">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+                <span style="font-size:12px;font-weight:600;color:var(--text)"> <a href="/nguoi-dung/15279" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;vertical-align:middle"><span style="width:20px;height:20px;border-radius:20%;overflow:hidden;background:var(--blue);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><img src="/uploads/avatars/u15279_1784524407.webp" style="width:100%;height:100%;object-fit:cover" alt="FashionHub"></span><span style="font-size:12px;font-weight:600;color:var(--text)">Honghainhi9x</span></a></span>
+                <span style="font-size:10px;color:var(--text3)">13/08/2026 22:55</span>
+            </div>
+            <p style="font-size:12.5px;color:var(--text2);margin:0 0 4px">Chúc mừng ông ngon chim</p>
+            <div style="display:flex;align-items:center;gap:8px">
+                <button type="button" onclick="reactBtn(this,'comment',44498,'like')" data-react="like" class="react-btn ">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+                    <span class="rc">1</span>
+                </button>
+                <button type="button" onclick="reactBtn(this,'comment',44498,'dislike')" data-react="dislike" class="react-btn ">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:block;transform:rotate(180deg)"><path d="M2 10h4v11H2zM22 10.7c0-.9-.7-1.7-1.7-1.7h-5.3l.8-3.9v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9.3c0 1 .8 1.7 1.7 1.7h7.6c.7 0 1.3-.4 1.6-1l2.7-6.3c.1-.2.1-.5.1-.7z"/></svg>
+                    <span class="rc">0</span>
+                </button>
+                            </div>
+        </div>
+                    </div>
+        <form method="POST" action="/gai-goi/4953/reply" id="rf-cmt-44466" class="reply-form" style="display:none">
+        <input type="hidden" name="_token" value="6CsaTcBOne2QP1nDkUIgzN2oMAhsdnA1VdANrruD" autocomplete="off">        <input type="hidden" name="parent_id" value="44466">
+        <input type="hidden" name="reply_type" value="comment">
+        <input type="text" name="content" placeholder="Viết trả lời..." required maxlength="1000" class="reply-input">
+        <label style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);cursor:pointer;white-space:nowrap;margin-right:4px"><input type="checkbox" name="is_anonymous" value="1" style="width:auto;margin:0">Ẩn danh</label>
+        <button type="submit" class="reply-send">Gửi</button>
+    </form>
+</div>
+    </div>
+        </div>
+    </div>
+
+
+
+
+
+
+<div class="card" style="padding:16px;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border))"></div>
+        <div style="font-size:15px;font-weight:700;color:var(--text2);white-space:nowrap;letter-spacing:0.3px">Có thể bạn muốn xem</div>
+        <div style="flex:1;height:1px;background:linear-gradient(to left,transparent,var(--border))"></div>
+    </div>
+    <div style="display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px" id="rel-track">
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/1077/ngoc-thao-2k4gai-mien-tay-xinh-dep-tuong-non-tuoi-trang-treo" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a7f52dd65670_1786729181.webp" srcset="/uploads/products/public/thumb_xs_6a7f52dd65670_1786729181.webp 192w, /uploads/products/public/thumb_sm_6a7f52dd65670_1786729181.webp 250w, /uploads/products/public/thumb_6a7f52dd65670_1786729181.webp 340w, /uploads/products/public/thumb_md_6a7f52dd65670_1786729181.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="Ngọc Thảo 2k4❤️Gái Miền Tây Xinh Đẹp Tướng Non Tươi Trắng Trẻo" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">Ngọc Thảo 2k4❤️Gái Miền Tây Xinh Đẹp Tướng Non Tươi Trắng Trẻo</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">600K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>6.9K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4195/gai-xinh-mai-anh-non-to-dang-yeu-chat-gay-nghien-cho-ae-nhe" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a6613b27679d_1785074610.webp" srcset="/uploads/products/public/thumb_xs_6a6613b27679d_1785074610.webp 192w, /uploads/products/public/thumb_sm_6a6613b27679d_1785074610.webp 250w, /uploads/products/public/thumb_6a6613b27679d_1785074610.webp 340w, /uploads/products/public/thumb_md_6a6613b27679d_1785074610.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="💗 GÁI XINH MAI ANH_ NON TƠ ĐÁNG YÊU_CHẤT GÂY NGHIỆN CHO AE NHÉ" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">💗 GÁI XINH MAI ANH_ NON TƠ ĐÁNG YÊU_CHẤT GÂY NGHIỆN CHO AE NHÉ</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>4.8K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4547/gai-teen-anh-thu-chuan-gai-moi-lon-ngot-ngao-tinh-cam-dang-yeu" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a701dee7c9bc_1785732590.webp" srcset="/uploads/products/public/thumb_xs_6a701dee7c9bc_1785732590.webp 192w, /uploads/products/public/thumb_sm_6a701dee7c9bc_1785732590.webp 250w, /uploads/products/public/thumb_6a701dee7c9bc_1785732590.webp 340w, /uploads/products/public/thumb_md_6a701dee7c9bc_1785732590.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="💗GÁI TEEN ANH THƯ_ CHUẨN GÁI MỚI LỚN NGỌT NGÀO TÌNH CẢM ĐÁNG YÊU" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">💗GÁI TEEN ANH THƯ_ CHUẨN GÁI MỚI LỚN NGỌT NGÀO TÌNH CẢM ĐÁNG YÊU</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>8.3K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/3264/new-hot-teen-2k5-be-ha-linh-baby-non-to-sexy-dang-yeu-quyen-ru" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a56318290efe_1784033666.webp" srcset="/uploads/products/public/thumb_xs_6a56318290efe_1784033666.webp 192w, /uploads/products/public/thumb_sm_6a56318290efe_1784033666.webp 250w, /uploads/products/public/thumb_6a56318290efe_1784033666.webp 340w, /uploads/products/public/thumb_md_6a56318290efe_1784033666.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="New Hót Teen 2k5 Bé Hà Linh Baby 🌸 Non Tơ Sexy Đáng Yêu Quyến Rũ" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">New Hót Teen 2k5 Bé Hà Linh Baby 🌸 Non Tơ Sexy Đáng Yêu Quyến Rũ</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>8.7K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/1069/vu-bu-be-yeu2k4-mup-tuoi-teen-dam-khit-va-nhieu-nuoc" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a44b6265a070_1782887974.webp" srcset="/uploads/products/public/thumb_xs_6a44b6265a070_1782887974.webp 192w, /uploads/products/public/thumb_sm_6a44b6265a070_1782887974.webp 250w, /uploads/products/public/thumb_6a44b6265a070_1782887974.webp 340w, /uploads/products/public/thumb_md_6a44b6265a070_1782887974.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="Vú Bự Bé Yêu❤️2k4 Múp Tươi Teen Dâm Khít Và Nhiều Nước" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">Vú Bự Bé Yêu❤️2k4 Múp Tươi Teen Dâm Khít Và Nhiều Nước</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(1)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>9.3K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4626/phuong-anh-em-gai-moc-mac-hien-lanh-moi-di-lam-lan-dau" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a722e26ca071_1785867814.webp" srcset="/uploads/products/public/thumb_xs_6a722e26ca071_1785867814.webp 192w, /uploads/products/public/thumb_sm_6a722e26ca071_1785867814.webp 250w, /uploads/products/public/thumb_6a722e26ca071_1785867814.webp 340w, /uploads/products/public/thumb_md_6a722e26ca071_1785867814.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="PHƯƠNG ANH EM GÁI MỘC MẠC HIỀN LÀNH MỚI ĐI LÀM LẦN ĐẦU" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">PHƯƠNG ANH EM GÁI MỘC MẠC HIỀN LÀNH MỚI ĐI LÀM LẦN ĐẦU</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>3.6K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4368/linh-ngocminh-day-quyen-ru-phuc-vu-nhiet-tinh" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a6adf1ab9b29_1785388826.webp" srcset="/uploads/products/public/thumb_xs_6a6adf1ab9b29_1785388826.webp 192w, /uploads/products/public/thumb_sm_6a6adf1ab9b29_1785388826.webp 250w, /uploads/products/public/thumb_6a6adf1ab9b29_1785388826.webp 340w, /uploads/products/public/thumb_md_6a6adf1ab9b29_1785388826.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="❤️Linh Ngọc❤️Mình Dây Quyến Rũ-Phục Vụ Nhiệt Tình" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                <div style="position:absolute;bottom:6px;right:6px">
+            <span style="display:flex;align-items:center;justify-content:center" title="Có video">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#ff5722" style="display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.7))" aria-hidden="true"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </span>
+        </div>
+                
+            </div>
+    <div class="product-info">
+        <div class="product-name">❤️Linh Ngọc❤️Mình Dây Quyến Rũ-Phục Vụ Nhiệt Tình</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">600K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>11K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/691/gai-dam-quynh-ngoc-ngoan-xinh-yeu-chieu-khach-toi-ben-lam-tinh-max-phe" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a4110b9dda33_1782649017.webp" srcset="/uploads/products/public/thumb_xs_6a4110b9dda33_1782649017.webp 192w, /uploads/products/public/thumb_sm_6a4110b9dda33_1782649017.webp 250w, /uploads/products/public/thumb_6a4110b9dda33_1782649017.webp 340w, /uploads/products/public/thumb_md_6a4110b9dda33_1782649017.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="💗 GÁI DÂM QUỲNH NGỌC _ NGOAN XINH YÊU _CHIỀU KHÁCH TỚI BẾN LÀM TÌNH MAX PHÊ" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">💗 GÁI DÂM QUỲNH NGỌC _ NGOAN XINH YÊU _CHIỀU KHÁCH TỚI BẾN LÀM TÌNH MAX PHÊ</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">300K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(1)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>8.8K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/183/yen-nhi-be-2k1-sexy-thieu-nu-dam-ngot-ngao-rat-dang-check" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a3b5d0a03fc4_1782275338.webp" srcset="/uploads/products/public/thumb_xs_6a3b5d0a03fc4_1782275338.webp 192w, /uploads/products/public/thumb_sm_6a3b5d0a03fc4_1782275338.webp 250w, /uploads/products/public/thumb_6a3b5d0a03fc4_1782275338.webp 340w, /uploads/products/public/thumb_md_6a3b5d0a03fc4_1782275338.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="YẾN NHI bé 2k1 - Sexy thiếu nữ - dâm ngọt ngào rất đáng check" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">YẾN NHI bé 2k1 - Sexy thiếu nữ - dâm ngọt ngào rất đáng check</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">400K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(3)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>13.8K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/2902/my-tien-tieu-my-nhan-duyen-dang-de-thuong" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a5202ad80388_1783759533.webp" srcset="/uploads/products/public/thumb_xs_6a5202ad80388_1783759533.webp 192w, /uploads/products/public/thumb_sm_6a5202ad80388_1783759533.webp 250w, /uploads/products/public/thumb_6a5202ad80388_1783759533.webp 340w, /uploads/products/public/thumb_md_6a5202ad80388_1783759533.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="❤️ Mỹ Tiên - Tiểu Mỹ Nhân - duyên dáng dễ thương" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">❤️ Mỹ Tiên - Tiểu Mỹ Nhân - duyên dáng dễ thương</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">200K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>12.9K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4647/lan-anhxinh-dam-phuc-vu-nhiet-tinh" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a7314d824ab4_1785926872.webp" srcset="/uploads/products/public/thumb_xs_6a7314d824ab4_1785926872.webp 192w, /uploads/products/public/thumb_sm_6a7314d824ab4_1785926872.webp 250w, /uploads/products/public/thumb_6a7314d824ab4_1785926872.webp 340w, /uploads/products/public/thumb_md_6a7314d824ab4_1785926872.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="❣️LAN ANH❣️XINH DÂM PHỤC VỤ NHIỆT TÌNH" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">❣️LAN ANH❣️XINH DÂM PHỤC VỤ NHIỆT TÌNH</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">300K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>3.9K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/3105/ngoc-mai-em-gai-ngoan-hien-vu-to-bim-mup" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a54752b9f13b_1783919915.webp" srcset="/uploads/products/public/thumb_xs_6a54752b9f13b_1783919915.webp 192w, /uploads/products/public/thumb_sm_6a54752b9f13b_1783919915.webp 250w, /uploads/products/public/thumb_6a54752b9f13b_1783919915.webp 340w, /uploads/products/public/thumb_md_6a54752b9f13b_1783919915.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="Ngọc Mai - Em Gái Ngoan Hiền Vú To Bím Múp" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">Ngọc Mai - Em Gái Ngoan Hiền Vú To Bím Múp</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">300K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>4.7K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/1077/ngoc-thao-2k4gai-mien-tay-xinh-dep-tuong-non-tuoi-trang-treo" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a7f52dd65670_1786729181.webp" srcset="/uploads/products/public/thumb_xs_6a7f52dd65670_1786729181.webp 192w, /uploads/products/public/thumb_sm_6a7f52dd65670_1786729181.webp 250w, /uploads/products/public/thumb_6a7f52dd65670_1786729181.webp 340w, /uploads/products/public/thumb_md_6a7f52dd65670_1786729181.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="Ngọc Thảo 2k4❤️Gái Miền Tây Xinh Đẹp Tướng Non Tươi Trắng Trẻo" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">Ngọc Thảo 2k4❤️Gái Miền Tây Xinh Đẹp Tướng Non Tươi Trắng Trẻo</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">600K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>6.9K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4195/gai-xinh-mai-anh-non-to-dang-yeu-chat-gay-nghien-cho-ae-nhe" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a6613b27679d_1785074610.webp" srcset="/uploads/products/public/thumb_xs_6a6613b27679d_1785074610.webp 192w, /uploads/products/public/thumb_sm_6a6613b27679d_1785074610.webp 250w, /uploads/products/public/thumb_6a6613b27679d_1785074610.webp 340w, /uploads/products/public/thumb_md_6a6613b27679d_1785074610.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="💗 GÁI XINH MAI ANH_ NON TƠ ĐÁNG YÊU_CHẤT GÂY NGHIỆN CHO AE NHÉ" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">💗 GÁI XINH MAI ANH_ NON TƠ ĐÁNG YÊU_CHẤT GÂY NGHIỆN CHO AE NHÉ</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>4.8K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4547/gai-teen-anh-thu-chuan-gai-moi-lon-ngot-ngao-tinh-cam-dang-yeu" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a701dee7c9bc_1785732590.webp" srcset="/uploads/products/public/thumb_xs_6a701dee7c9bc_1785732590.webp 192w, /uploads/products/public/thumb_sm_6a701dee7c9bc_1785732590.webp 250w, /uploads/products/public/thumb_6a701dee7c9bc_1785732590.webp 340w, /uploads/products/public/thumb_md_6a701dee7c9bc_1785732590.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="💗GÁI TEEN ANH THƯ_ CHUẨN GÁI MỚI LỚN NGỌT NGÀO TÌNH CẢM ĐÁNG YÊU" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">💗GÁI TEEN ANH THƯ_ CHUẨN GÁI MỚI LỚN NGỌT NGÀO TÌNH CẢM ĐÁNG YÊU</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>8.3K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/3264/new-hot-teen-2k5-be-ha-linh-baby-non-to-sexy-dang-yeu-quyen-ru" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a56318290efe_1784033666.webp" srcset="/uploads/products/public/thumb_xs_6a56318290efe_1784033666.webp 192w, /uploads/products/public/thumb_sm_6a56318290efe_1784033666.webp 250w, /uploads/products/public/thumb_6a56318290efe_1784033666.webp 340w, /uploads/products/public/thumb_md_6a56318290efe_1784033666.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="New Hót Teen 2k5 Bé Hà Linh Baby 🌸 Non Tơ Sexy Đáng Yêu Quyến Rũ" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">New Hót Teen 2k5 Bé Hà Linh Baby 🌸 Non Tơ Sexy Đáng Yêu Quyến Rũ</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>8.7K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/1069/vu-bu-be-yeu2k4-mup-tuoi-teen-dam-khit-va-nhieu-nuoc" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a44b6265a070_1782887974.webp" srcset="/uploads/products/public/thumb_xs_6a44b6265a070_1782887974.webp 192w, /uploads/products/public/thumb_sm_6a44b6265a070_1782887974.webp 250w, /uploads/products/public/thumb_6a44b6265a070_1782887974.webp 340w, /uploads/products/public/thumb_md_6a44b6265a070_1782887974.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="Vú Bự Bé Yêu❤️2k4 Múp Tươi Teen Dâm Khít Và Nhiều Nước" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">Vú Bự Bé Yêu❤️2k4 Múp Tươi Teen Dâm Khít Và Nhiều Nước</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(1)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>9.3K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4626/phuong-anh-em-gai-moc-mac-hien-lanh-moi-di-lam-lan-dau" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a722e26ca071_1785867814.webp" srcset="/uploads/products/public/thumb_xs_6a722e26ca071_1785867814.webp 192w, /uploads/products/public/thumb_sm_6a722e26ca071_1785867814.webp 250w, /uploads/products/public/thumb_6a722e26ca071_1785867814.webp 340w, /uploads/products/public/thumb_md_6a722e26ca071_1785867814.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="PHƯƠNG ANH EM GÁI MỘC MẠC HIỀN LÀNH MỚI ĐI LÀM LẦN ĐẦU" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">PHƯƠNG ANH EM GÁI MỘC MẠC HIỀN LÀNH MỚI ĐI LÀM LẦN ĐẦU</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">500K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>3.6K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4368/linh-ngocminh-day-quyen-ru-phuc-vu-nhiet-tinh" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a6adf1ab9b29_1785388826.webp" srcset="/uploads/products/public/thumb_xs_6a6adf1ab9b29_1785388826.webp 192w, /uploads/products/public/thumb_sm_6a6adf1ab9b29_1785388826.webp 250w, /uploads/products/public/thumb_6a6adf1ab9b29_1785388826.webp 340w, /uploads/products/public/thumb_md_6a6adf1ab9b29_1785388826.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="❤️Linh Ngọc❤️Mình Dây Quyến Rũ-Phục Vụ Nhiệt Tình" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                <div style="position:absolute;bottom:6px;right:6px">
+            <span style="display:flex;align-items:center;justify-content:center" title="Có video">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#ff5722" style="display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.7))" aria-hidden="true"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            </span>
+        </div>
+                
+            </div>
+    <div class="product-info">
+        <div class="product-name">❤️Linh Ngọc❤️Mình Dây Quyến Rũ-Phục Vụ Nhiệt Tình</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">600K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>11K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/691/gai-dam-quynh-ngoc-ngoan-xinh-yeu-chieu-khach-toi-ben-lam-tinh-max-phe" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a4110b9dda33_1782649017.webp" srcset="/uploads/products/public/thumb_xs_6a4110b9dda33_1782649017.webp 192w, /uploads/products/public/thumb_sm_6a4110b9dda33_1782649017.webp 250w, /uploads/products/public/thumb_6a4110b9dda33_1782649017.webp 340w, /uploads/products/public/thumb_md_6a4110b9dda33_1782649017.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="💗 GÁI DÂM QUỲNH NGỌC _ NGOAN XINH YÊU _CHIỀU KHÁCH TỚI BẾN LÀM TÌNH MAX PHÊ" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">💗 GÁI DÂM QUỲNH NGỌC _ NGOAN XINH YÊU _CHIỀU KHÁCH TỚI BẾN LÀM TÌNH MAX PHÊ</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">300K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(1)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>8.8K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/183/yen-nhi-be-2k1-sexy-thieu-nu-dam-ngot-ngao-rat-dang-check" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a3b5d0a03fc4_1782275338.webp" srcset="/uploads/products/public/thumb_xs_6a3b5d0a03fc4_1782275338.webp 192w, /uploads/products/public/thumb_sm_6a3b5d0a03fc4_1782275338.webp 250w, /uploads/products/public/thumb_6a3b5d0a03fc4_1782275338.webp 340w, /uploads/products/public/thumb_md_6a3b5d0a03fc4_1782275338.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="YẾN NHI bé 2k1 - Sexy thiếu nữ - dâm ngọt ngào rất đáng check" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">YẾN NHI bé 2k1 - Sexy thiếu nữ - dâm ngọt ngào rất đáng check</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">400K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#e02020"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(3)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>13.8K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/2902/my-tien-tieu-my-nhan-duyen-dang-de-thuong" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a5202ad80388_1783759533.webp" srcset="/uploads/products/public/thumb_xs_6a5202ad80388_1783759533.webp 192w, /uploads/products/public/thumb_sm_6a5202ad80388_1783759533.webp 250w, /uploads/products/public/thumb_6a5202ad80388_1783759533.webp 340w, /uploads/products/public/thumb_md_6a5202ad80388_1783759533.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="❤️ Mỹ Tiên - Tiểu Mỹ Nhân - duyên dáng dễ thương" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">❤️ Mỹ Tiên - Tiểu Mỹ Nhân - duyên dáng dễ thương</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">200K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>12.9K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/4647/lan-anhxinh-dam-phuc-vu-nhiet-tinh" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a7314d824ab4_1785926872.webp" srcset="/uploads/products/public/thumb_xs_6a7314d824ab4_1785926872.webp 192w, /uploads/products/public/thumb_sm_6a7314d824ab4_1785926872.webp 250w, /uploads/products/public/thumb_6a7314d824ab4_1785926872.webp 340w, /uploads/products/public/thumb_md_6a7314d824ab4_1785926872.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="❣️LAN ANH❣️XINH DÂM PHỤC VỤ NHIỆT TÌNH" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">❣️LAN ANH❣️XINH DÂM PHỤC VỤ NHIỆT TÌNH</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">300K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>3.9K</span>
+        </div>
+    </div>
+</a>
+        </div>
+                <div style="flex:0 0 150px;width:150px;min-width:150px">
+            <a href="/gai-goi/3105/ngoc-mai-em-gai-ngoan-hien-vu-to-bim-mup" class="product-card" style="">
+        <div style="position:relative;overflow:hidden">
+                    <div class="img-wrap">
+                <img src="/uploads/products/public/thumb_sm_6a54752b9f13b_1783919915.webp" srcset="/uploads/products/public/thumb_xs_6a54752b9f13b_1783919915.webp 192w, /uploads/products/public/thumb_sm_6a54752b9f13b_1783919915.webp 250w, /uploads/products/public/thumb_6a54752b9f13b_1783919915.webp 340w, /uploads/products/public/thumb_md_6a54752b9f13b_1783919915.webp 460w" sizes="(max-width:768px) 39vw, (max-width:1024px) 230px, 230px" alt="Ngọc Mai - Em Gái Ngoan Hiền Vú To Bím Múp" loading="lazy" fetchpriority="auto" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">            </div>
+                                                                
+            </div>
+    <div class="product-info">
+        <div class="product-name">Ngọc Mai - Em Gái Ngoan Hiền Vú To Bím Múp</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:4px;color:var(--blue);font-size:12.5px;font-weight:600;overflow:hidden;min-width:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg><span style="overflow:hidden;text-overflow:ellipsis">Dĩ An</span></span>
+            <span style="display:flex;align-items:center;gap:5px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0">300K</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;white-space:nowrap">
+            <span style="display:flex;align-items:center;gap:0;font-size:0"><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><svg width="12.5" height="12.5" viewBox="0 0 24 24" fill="#5a5b5c"><path d="M12 2l2.9 6.3 6.8.6-5.1 4.5 1.5 6.7L12 17.3 5.9 20.6l1.5-6.7L2.3 8.9l6.8-.6z"/></svg><span style="color:var(--text3);font-size:11.5px;margin-left:3px">(0)</span></span>
+            <span style="display:flex;align-items:center;gap:4px;color:#b0b3b8;font-size:13px;font-weight:400;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="#b0b3b8"><path d="M12 4.5C6.5 4.5 2 9.2 1 12c1 2.8 5.5 7.5 11 7.5s10-4.7 11-7.5c-1-2.8-5.5-7.5-11-7.5zm0 11.5a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="12" cy="12" r="2.2"/></svg>4.7K</span>
+        </div>
+    </div>
+</a>
+        </div>
+            </div>
+</div>
+<script>
+(function(){
+    var track = document.getElementById('rel-track');
+    if (!track) return;
+    var paused = false, raf = null;
+    var SPEED = 0.25;
+    function canScroll(){ return track.scrollWidth - track.clientWidth > 8; }
+    function step(){
+        if (!paused && canScroll()){
+            var half = track.scrollWidth / 2;
+            track.scrollLeft += SPEED;
+            if (track.scrollLeft >= half){
+                track.scrollLeft -= half;
+            }
+        }
+        raf = requestAnimationFrame(step);
+    }
+    track.addEventListener('mouseenter', function(){ paused = true; });
+    track.addEventListener('mouseleave', function(){ paused = false; });
+    track.addEventListener('touchstart', function(){ paused = true; }, {passive:true});
+    track.addEventListener('touchend', function(){ setTimeout(function(){ paused = false; }, 2000); }, {passive:true});
+    var wheelTimer;
+    track.addEventListener('wheel', function(){
+        paused = true; clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(function(){ paused = false; }, 2000);
+    }, {passive:true});
+    document.addEventListener('visibilitychange', function(){
+        if (document.hidden){ if(raf) cancelAnimationFrame(raf); raf=null; }
+        else if(!raf){ raf = requestAnimationFrame(step); }
+    });
+    setTimeout(function(){ if(!raf) raf = requestAnimationFrame(step); }, 800);
+})();
+</script>
+
+<div id="lightbox" onclick="closeLightbox(event)" style="display:none;position:fixed;inset:0;background:#000;z-index:9999;align-items:center;justify-content:center">
+    
+    <div style="position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:10001">
+        <button onclick="lbClose(event)" aria-label="Quay lại" style="background:none;border:none;cursor:pointer;padding:8px;display:flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span id="lb-counter" style="color:#fff;font-size:15px;font-weight:600"></span>
+        <div style="display:flex;align-items:center;gap:4px">
+            <button onclick="lbToggleFav(event)" id="lb-fav" aria-label="Yêu thích" style="background:none;border:none;cursor:pointer;padding:8px;display:flex"><svg id="lb-fav-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 20.3c-.4 0-.8-.15-1.1-.42C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.9 11.38-.3.27-.7.42-1.1.42z"/></svg></button>
+            <button onclick="shareProduct();lbClose(event)" aria-label="Chia sẻ" style="background:none;border:none;cursor:pointer;padding:8px;display:flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg></button>
+        </div>
+    </div>
+    <button onclick="lbPrev(event)" id="lb-prev" aria-label="Trước" style="position:fixed;left:10px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:24px;line-height:1;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center">‹</button>
+    <img id="lightbox-img" src="" alt="" style="max-width:100%;max-height:80%;touch-action:none;transition:transform .15s ease-out;will-change:transform">
+    <button onclick="lbNext(event)" id="lb-next" aria-label="Sau" style="position:fixed;right:10px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:24px;line-height:1;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center">›</button>
+</div>
+<script>
+let lbImages = [];
+let lbIndex  = 0;
+
+function showMore(cls, btn) {
+    const items = document.querySelectorAll('.' + cls);
+    let shown = 0;
+    for (let i = 0; i < items.length && shown < 5; i++) {
+        if (items[i].style.display === 'none') { items[i].style.display = ''; shown++; }
+    }
+    const stillHidden = Array.from(items).some(el => el.style.display === 'none');
+    if (!stillHidden) btn.style.display = 'none';
+}
+function showMoreReplies(btn){
+    var box = btn.closest('[data-reply-box]') || btn.parentElement;
+    box.querySelectorAll('.reply-extra').forEach(function(el){ el.style.display = ''; });
+    btn.style.display = 'none';
+}
+function toggleProof(id, btn) {
+    const box = document.getElementById(id);
+    const willOpen = box.style.display === 'none';
+    box.style.display = willOpen ? 'flex' : 'none';
+    btn.textContent = (willOpen ? 'Ẩn ảnh (' : 'Hiện ảnh (') + btn.dataset.n + ')';
+}
+var _scrollY = 0;
+function lockScroll(){
+    _scrollY = window.scrollY || window.pageYOffset;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + _scrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+}
+function unlockScroll(){
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, _scrollY);
+}
+function openLightbox(src, group) {
+    // group: selector nhom anh (mac dinh album san pham). Anh danh gia truyen group rieng.
+    var sel = group || '#album-track img';
+    lbImages = Array.from(document.querySelectorAll(sel)).map(function(i){ var f = i.getAttribute('data-full'); if (f) { return f; } return i.src; }); // FIX lightbox anh goc
+    if (!lbImages.length) lbImages = [src];
+    // Chuyen src thanh URL tuyet doi de so khop (img.src luon tuyet doi)
+    var abs = new URL(src, window.location.href).href;
+    lbIndex = lbImages.indexOf(abs);
+    if (lbIndex < 0) lbIndex = lbImages.indexOf(src);
+    if (lbIndex < 0) lbIndex = 0;
+    lbShow();
+    document.getElementById('lightbox').style.display = 'flex';
+    lockScroll();
+    document.addEventListener('keydown', lbKey);
+}
+
+function lbShow() {
+    document.getElementById('lightbox-img').src = lbImages[lbIndex];
+    document.getElementById('lb-counter').textContent = (lbIndex+1) + ' / ' + lbImages.length;
+    if (window.lbResetZoom) window.lbResetZoom();
+}
+
+function lbNext(e) { if(e) e.stopPropagation(); lbIndex = (lbIndex+1) % lbImages.length; lbShow(); }
+function lbPrev(e) { if(e) e.stopPropagation(); lbIndex = (lbIndex-1+lbImages.length) % lbImages.length; lbShow(); }
+
+function closeLightbox(e) {
+    if (e.target.id === 'lightbox') {
+        document.getElementById('lightbox').style.display = 'none';
+        unlockScroll();
+        document.removeEventListener('keydown', lbKey);
+    }
+}
+function lbClose(e){ if(e) e.stopPropagation(); document.getElementById('lightbox').style.display='none'; unlockScroll(); document.removeEventListener('keydown', lbKey); }
+function lbToggleFav(e){
+    if(e) e.stopPropagation();
+    var mainBtn = document.getElementById('fav-btn');
+    if(mainBtn) mainBtn.click(); // dung lai logic nut tim chinh
+}
+
+function lbKey(e) {
+    if (e.key === 'ArrowRight') lbNext();
+    else if (e.key === 'ArrowLeft') lbPrev();
+    else if (e.key === 'Escape') { document.getElementById('lightbox').style.display='none'; unlockScroll(); document.removeEventListener('keydown', lbKey); }
+}
+
+// ===== Zoom + Swipe trong lightbox (kieu Shopee) =====
+(function(){
+    var lb = document.getElementById('lightbox');
+    var img = document.getElementById('lightbox-img');
+    var scale=1, tx=0, ty=0;            // trang thai zoom hien tai
+    var startDist=0, startScale=1;      // pinch
+    var lastX=0, lastY=0, panning=false;// keo di chuyen
+    var startX=0, swipeReady=false;     // swipe chuyen anh
+    var lastTap=0;
+
+    function apply(){ img.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')'; }
+    function reset(){ scale=1; tx=0; ty=0; apply(); }
+    window.lbResetZoom = reset;
+
+    function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+
+    img.addEventListener('touchstart', function(e){
+        e.stopPropagation();
+        if(e.touches.length===2){
+            startDist=dist(e.touches); startScale=scale;
+        } else if(e.touches.length===1){
+            if(scale>1){ panning=true; lastX=e.touches[0].clientX-tx; lastY=e.touches[0].clientY-ty; }
+            else { startX=e.touches[0].clientX; swipeReady=true; }
+        }
+    }, {passive:false});
+
+    img.addEventListener('touchmove', function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(e.touches.length===2){
+            var d=dist(e.touches);
+            var __mx=(img&&img.naturalWidth&&img.clientWidth)?Math.max(1,Math.min(img.naturalWidth/img.clientWidth,8)):3; scale=Math.min(Math.max(startScale*(d/startDist),1),__mx);
+            apply();
+        } else if(e.touches.length===1 && panning){
+            tx=e.touches[0].clientX-lastX; ty=e.touches[0].clientY-lastY; apply();
+        }
+    }, {passive:false});
+
+    img.addEventListener('touchend', function(e){
+        e.stopPropagation();
+        // Double-tap zoom
+        var now=Date.now();
+        if(e.touches.length===0 && now-lastTap<300 && !panning){
+            if(scale>1) reset(); else { var __mx2=(img&&img.naturalWidth&&img.clientWidth)?Math.max(1,Math.min(img.naturalWidth/img.clientWidth,8)):3; scale=Math.min(2.5,__mx2); apply(); }
+        }
+        lastTap=now;
+        // Swipe chuyen anh (chi khi chua zoom)
+        if(swipeReady && scale===1 && e.changedTouches.length){
+            var diff=startX-e.changedTouches[0].clientX;
+            if(Math.abs(diff)>40){ diff>0?lbNext():lbPrev(); }
+        }
+        if(scale<=1) reset();
+        panning=false; swipeReady=false;
+    }, {passive:false});
+
+    // Double-click desktop
+    img.addEventListener('dblclick', function(e){ e.stopPropagation(); if(scale>1) reset(); else { var __mx3=(img&&img.naturalWidth&&img.clientWidth)?Math.max(1,Math.min(img.naturalWidth/img.clientWidth,8)):3; scale=Math.min(2.5,__mx3); apply(); } });
+})();
+</script>
+
+<script>
+function toggleFav(){
+    var btn = document.getElementById('fav-btn');
+    var icon = document.getElementById('fav-icon');
+    fetch('/gai-goi/4953/toggle-favorite', {
+        method:'POST',
+        headers:{'X-CSRF-TOKEN':'6CsaTcBOne2QP1nDkUIgzN2oMAhsdnA1VdANrruD','Accept':'application/json'}
+    }).then(function(r){
+        if(r.status===401){ showLoginConfirm(); return null; }
+        return r.json();
+    }).then(function(d){
+        if(!d) return;
+        var lbi = document.getElementById('lb-fav-icon');
+        if(d.favorited){
+            btn.classList.add('faved');
+            icon.setAttribute('fill','#fff');
+            icon.setAttribute('stroke','#fff');
+            if(lbi){ lbi.setAttribute('fill','#f02849'); lbi.setAttribute('stroke','#f02849'); }
+        } else {
+            btn.classList.remove('faved');
+            icon.setAttribute('fill','none');
+            icon.setAttribute('stroke','var(--text2)');
+            if(lbi){ lbi.setAttribute('fill','none'); lbi.setAttribute('stroke','#fff'); }
+        }
+    }).catch(function(){});
+}
+function toggleReply(kind, id){
+        showLoginConfirm(); return;
+        var f = document.getElementById('rf-'+(kind==='cmt'?'cmt':'rate')+'-'+id);
+    if(!f) return;
+    f.style.display = (f.style.display==='none' || !f.style.display) ? 'flex' : 'none';
+    if(f.style.display==='flex'){ var i=f.querySelector('.reply-input'); if(i) i.focus(); }
+}
+</script>
+
+.fav-btn{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;margin-left:4px;border:1px solid var(--border);background:linear-gradient(145deg,#2c2d30,#1c1d1f);cursor:pointer;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.06);transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s}
+.fav-btn:hover{transform:translateY(-2px);border-color:#f0284955;box-shadow:0 6px 16px rgba(240,40,73,0.25),inset 0 1px 0 rgba(255,255,255,0.08)}
+.fav-btn:active{transform:scale(.9)}
+.fav-btn .fav-glow{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 50% 40%,rgba(240,40,73,0.35),transparent 70%);opacity:0;transition:opacity .25s}
+.fav-btn.faved{background:linear-gradient(145deg,#ff4d6d,#f02849);border-color:#ff6b85;box-shadow:0 4px 14px rgba(240,40,73,0.5),inset 0 1px 0 rgba(255,255,255,0.25)}
+.fav-btn.faved .fav-glow{opacity:1}
+.fav-btn.faved #fav-icon{animation:favPop .42s cubic-bezier(.34,1.56,.64,1)}
+@keyframes favPop{0%{transform:scale(1)}35%{transform:scale(1.35)}60%{transform:scale(.9)}100%{transform:scale(1)}}
+@keyframes favBeat{0%,100%{transform:scale(1)}25%{transform:scale(1.15)}50%{transform:scale(1)}}
+.mng-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .12s,filter .15s}
+.mng-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.mng-btn:active{transform:translateY(0)}
+@media (max-width:480px){
+  .mng-btn{font-size:11.5px;padding:9px 4px;gap:4px;min-width:0;border-radius:8px}
+  .mng-btn svg{width:12px;height:12px;flex-shrink:0}
+  .mng-sub{flex-wrap:nowrap !important;gap:5px !important}
+  .mng-sub .mng-btn{flex:1 1 0 !important;min-width:0;font-size:10px;padding:8px 2px;white-space:nowrap}
+}
+.react-btn{display:inline-flex;align-items:center;gap:4px;padding:2px 4px;background:none;color:var(--text3);border:none;font-size:12px;font-weight:600;cursor:pointer;transition:color .15s}
+.react-btn:hover{color:var(--text2)}
+.react-btn .rc{font-size:12px;font-weight:700;min-width:6px}
+.react-btn.on-like{color:var(--blue)}
+.react-btn.on-dislike{color:var(--red)}
+.react-btn:active{transform:scale(.88)}
+.reply-link{background:none;border:none;color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;padding:2px 4px;transition:color .15s}
+.reply-link:hover{color:var(--blue)}
+.reply-list{margin:8px 0 0 14px;padding-left:12px;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:10px}
+.reply-item{padding-top:2px}
+.reply-form{display:flex;gap:6px;margin:8px 0 0 14px}
+.reply-input{flex:1;min-width:0;font-size:13px;padding:8px 12px;border-radius:18px;border:1px solid var(--border);background:var(--bg);color:var(--text)}
+.reply-send{flex-shrink:0;padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:18px;font-size:13px;font-weight:700;cursor:pointer}
+#share-sheet{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10004;align-items:flex-end;justify-content:center}
+#share-sheet.open{display:flex}
+.share-panel{background:var(--bg2);width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:20px 18px 24px;animation:sheetUp .25s ease-out}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.share-opt{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--text2);font-size:11px;font-weight:600}
+.share-ic{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.attr-row{transition:background .15s}
+.attr-row:hover{background:rgba(255,255,255,0.06)}
+</main>
+
+
+<footer style="margin-top:16px;border-top:1px solid var(--border);background:var(--bg2);padding:24px 16px 90px">
+    <div style="max-width:900px;margin:0 auto">
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;border-top:1px solid var(--border);padding-top:16px">
+            <div style="font-weight:800;color:var(--text);font-size:14px;margin-bottom:6px">Gái Gú - Gái Tơ</div>
+            <p style="margin:0 0 6px">Nền tảng tổng hợp gái gọi cao cấp toàn quốc, hình ảnh thật đã xác thực, kín đáo và uy tín. Cập nhật liên tục mỗi ngày trên khắp 63 tỉnh thành.</p>
+            <p style="margin:0">© 2026 Gái Gú - Gái Tơ. Nội dung dành cho người trên 18 tuổi.</p>
+        <p style="margin:6px 0 0;font-size:12px"><a href="https://theporndude.com/vi" rel="nofollow" target="_blank" style="color:var(--text3);text-decoration:none">ThePornDude</a></p>
+        </div>
+    </div>
+</footer>
+
+<div class="bottom-nav">
+    <a href="/" class="">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span><span>Trang chủ</span>
+    </a>
+    <a href="/khu-vuc" class="active">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><span>Khu vực</span>
+    </a>
+    <a href="/thao-luan" class="">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-5.4A8 8 0 1 1 21 11.5z"/></svg></span><span>Diễn đàn</span>
+    </a>
+    <a href="/chat-sex" class="">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10h8M8 14h5"/><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 20.5l1.4-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg></span><span>Chat Sex</span>
+    </a>
+        <a href="/login">
+        <span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span><span>Đăng nhập</span>
+    </a>
+    </div>
+
+<script>
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  function initReveal(){
+    var cards = document.querySelectorAll('.product-card:not(.reveal)');
+    cards.forEach(function(el){ el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('shown'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.08, rootMargin:'0px 0px -30px 0px'});
+    document.querySelectorAll('.product-card.reveal:not(.shown)').forEach(function(el){ io.observe(el); });
+  }
+  if(document.readyState!=='loading') initReveal();
+  else document.addEventListener('DOMContentLoaded', initReveal);
+})();
+</script>
+<script>
+(function(){
+  function markLoaded(img){ img.classList.add('loaded'); }
+  function initImgs(){
+    document.querySelectorAll('.product-card .img-wrap img').forEach(function(img){
+      if(img.complete && img.naturalWidth>0){ markLoaded(img); }
+      else { img.addEventListener('load', function(){ markLoaded(img); }); img.addEventListener('error', function(){ markLoaded(img); }); }
+    });
+  }
+  if(document.readyState!=='loading') initImgs();
+  else document.addEventListener('DOMContentLoaded', initImgs);
+})();
+</script>
+
+<script>
+(function(){
+  if(!window.fetch||!document.addEventListener) return;
+  var box=null, items=[], active=-1, curEl=null, debounce=null, seq=0, lastQ=null;
+  function ensureBox(){
+    if(box) return box;
+    box=document.createElement('div'); box.id='mentionBox';
+    box.style.cssText='position:absolute;z-index:99999;min-width:200px;max-width:300px;max-height:240px;overflow-y:auto;background:var(--bg2,#242526);border:1px solid var(--border,#3a3b3c);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.45);padding:4px;display:none;font-size:13px;font-family:inherit';
+    document.body.appendChild(box); return box;
+  }
+  function hide(){ if(box) box.style.display='none'; items=[]; active=-1; lastQ=null; }
+  function isTarget(el){ return el && (el.tagName==='TEXTAREA'||el.tagName==='INPUT') && el.name==='content'; }
+  function findToken(el){
+    var pos=el.selectionStart; if(pos==null) return null;
+    var before=el.value.slice(0,pos);
+    var m=before.match(/(^|\s)@([^@\n\r]{0,30})$/);
+    if(!m) return null;
+    var q=m[2]; return { q:q, start:pos-q.length-1, end:pos };
+  }
+  var posRaf=0;
+  function position(){
+    if(!curEl||!box) return;
+    if(posRaf) return; // throttle: gom nhieu lan goi vao 1 frame
+    posRaf=requestAnimationFrame(function(){
+      posRaf=0;
+      if(!curEl||!box) return;
+      var r=curEl.getBoundingClientRect();
+      box.style.left=(window.scrollX+r.left)+'px';
+      box.style.top=(window.scrollY+r.bottom+4)+'px';
+    });
+  }
+  function render(){
+    var b=ensureBox();
+    if(!items.length){ hide(); return; }
+    b.innerHTML='';
+    items.forEach(function(u,i){
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--text,#e4e6eb);'+(i===active?'background:var(--bg3,#3a3b3c);':'');
+      var av=document.createElement('div');
+      av.style.cssText='width:24px;height:24px;border-radius:20%;flex-shrink:0;background:var(--blue,#2d88ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;overflow:hidden';
+      if(u.avatar){ var img=document.createElement('img'); img.src='/'+u.avatar; img.style.cssText='width:100%;height:100%;object-fit:cover'; av.appendChild(img); }
+      else { av.textContent=(u.name||'?').charAt(0).toUpperCase(); }
+      var nm=document.createElement('span'); nm.textContent=u.name;
+      nm.style.cssText='white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+      row.appendChild(av); row.appendChild(nm);
+      row.addEventListener('mousedown', function(ev){ ev.preventDefault(); pick(i); });
+      row.addEventListener('mouseenter', function(){ active=i; highlight(); });
+      b.appendChild(row);
+    });
+    b.style.display='block'; position();
+  }
+  function highlight(){
+    if(!box) return;
+    var rows=box.children;
+    for(var i=0;i<rows.length;i++){
+      rows[i].style.background = (i===active) ? 'var(--bg3,#3a3b3c)' : 'transparent';
+    }
+  }
+  function pick(i){
+    if(!curEl||i<0||i>=items.length) return;
+    var u=items[i], el=curEl, v=el.value, tk=findToken(el);
+    if(!tk){ hide(); return; }
+    var ins='@'+u.name+' ';
+    el.value=v.slice(0,tk.start)+ins+v.slice(tk.end);
+    var caret=tk.start+ins.length;
+    try{ el.setSelectionRange(caret,caret); }catch(e){}
+    hide(); el.focus();
+  }
+  function query(el){
+    var tk=findToken(el);
+    if(!tk){ hide(); return; }
+    curEl=el;
+    var q=tk.q.trim();
+    if(q===''){ hide(); return; }
+    if(q===lastQ && box && box.style.display==='block') return;
+    lastQ=q;
+    clearTimeout(debounce);
+    var mine=++seq;
+    debounce=setTimeout(function(){
+      fetch('/mention/search?q='+encodeURIComponent(q),{headers:{'X-Requested-With':'XMLHttpRequest'},credentials:'same-origin'})
+        .then(function(r){ return r.json(); })
+        .then(function(d){ if(mine!==seq) return; items=Array.isArray(d)?d:[]; active=items.length?0:-1; render(); })
+        .catch(function(){ hide(); });
+    },150);
+  }
+  document.addEventListener('input', function(e){ if(isTarget(e.target)) query(e.target); });
+  document.addEventListener('keydown', function(e){
+    if(!box||box.style.display!=='block'||!items.length||!isTarget(e.target)) return;
+    if(e.key==='ArrowDown'){ e.preventDefault(); active=(active+1)%items.length; render(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); active=(active-1+items.length)%items.length; render(); }
+    else if(e.key==='Enter'||e.key==='Tab'){ e.preventDefault(); pick(active); }
+    else if(e.key==='Escape'){ hide(); }
+  });
+  document.addEventListener('click', function(e){ if(box && e.target!==curEl && !box.contains(e.target)) hide(); });
+  window.addEventListener('scroll', function(){ if(box&&box.style.display==='block') position(); }, {capture:true,passive:true});
+  window.addEventListener('resize', function(){ if(box&&box.style.display==='block') position(); });
+})();
+</script>
+
+
+
+<script>
+// ===== Viet hoa thong bao validation cua trinh duyet (global) =====
+(function(){
+    function viMsg(el){
+        var v = el.validity;
+        if (v.valueMissing) return 'Vui lòng điền thông tin này.';
+        if (v.typeMismatch) {
+            if (el.type === 'email') return 'Vui lòng nhập email hợp lệ.';
+            if (el.type === 'url') return 'Vui lòng nhập đường dẫn hợp lệ.';
+            return 'Giá trị không hợp lệ.';
+        }
+        if (v.rangeUnderflow) return 'Giá trị tối thiểu là ' + el.min + '.';
+        if (v.rangeOverflow) return 'Giá trị tối đa là ' + el.max + '.';
+        if (v.tooShort) return 'Vui lòng nhập ít nhất ' + el.minLength + ' ký tự.';
+        if (v.tooLong) return 'Tối đa ' + el.maxLength + ' ký tự.';
+        if (v.stepMismatch) return 'Giá trị không hợp lệ.';
+        if (v.patternMismatch) return 'Định dạng chưa đúng.';
+        if (v.badInput) return 'Vui lòng nhập số hợp lệ.';
+        return 'Thông tin chưa hợp lệ.';
+    }
+    document.addEventListener('invalid', function(e){
+        var el = e.target;
+        if (!el || !el.setCustomValidity) return;
+        // Neu form da tu set message rieng (vd form san pham) thi ton trong, khong ghi de
+        if (el.dataset.customMsg === '1') return;
+        el.setCustomValidity(viMsg(el));
+    }, true);
+    document.addEventListener('input', function(e){
+        var el = e.target;
+        if (el && el.setCustomValidity && el.dataset.customMsg !== '1') {
+            el.setCustomValidity('');
+        }
+    }, true);
+})();
+</script>
+
+<!-- ===== POPUP XAC NHAN DUNG CHUNG (thay confirm mac dinh) ===== -->
+<div id="fhConfirmOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;max-width:380px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,0.5);overflow:hidden">
+    <div style="padding:18px 20px 6px;font-size:16px;font-weight:800;color:var(--text)">Xác nhận</div>
+    <div id="fhConfirmMsg" style="padding:4px 20px 18px;font-size:14px;color:var(--text2);line-height:1.5"></div>
+    <div style="display:flex;gap:10px;padding:0 20px 18px">
+      <button type="button" id="fhConfirmCancel" style="flex:1;padding:11px;border-radius:9px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:14px;font-weight:700;cursor:pointer">Hủy</button>
+      <button type="button" id="fhConfirmOk" style="flex:1;padding:11px;border-radius:9px;border:none;background:var(--blue);color:#fff;font-size:14px;font-weight:700;cursor:pointer">Đồng ý</button>
+    </div>
+  </div>
+</div>
+<script>
+var _fhConfirmForm = null;
+function fhConfirm(formEl, message){
+  // Neu da xac nhan roi thi cho submit
+  if(formEl && formEl.getAttribute('data-fhok')==='1'){ formEl.removeAttribute('data-fhok'); return true; }
+  _fhConfirmForm = formEl;
+  document.getElementById('fhConfirmMsg').textContent = message || 'Bạn có chắc chắn?';
+  document.getElementById('fhConfirmOverlay').style.display = 'flex';
+  return false; // chan submit, cho bam Dong y
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var ov = document.getElementById('fhConfirmOverlay');
+  var ok = document.getElementById('fhConfirmOk');
+  var cancel = document.getElementById('fhConfirmCancel');
+  function close(){ ov.style.display='none'; _fhConfirmForm=null; }
+  ok.addEventListener('click', function(){
+    if(_fhConfirmForm){
+      var fm = _fhConfirmForm;
+      close();
+      fm.setAttribute('data-fhok','1');
+      if(fm.requestSubmit) fm.requestSubmit(); else fm.submit();
+    } else close();
+  });
+  cancel.addEventListener('click', close);
+  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+});
+</script>
+
+<script src="/js/editor.js?v=1" defer></script>
+<script>
+function toggleUserMenu(e){
+    e.stopPropagation();
+    var d = document.getElementById('userDropdown');
+    if (d) d.classList.toggle('open');
+}
+document.addEventListener('click', function(e){
+    var d = document.getElementById('userDropdown');
+    var m = document.querySelector('.user-menu');
+    if (d && m && !m.contains(e.target)) d.classList.remove('open');
+});
+</script>
+
+<div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+<a href="/api-internal-v2" rel="nofollow" tabindex="-1">.</a>
+<span>Noi dung doc quyen thuoc ve gaigu2.fit. Moi sao chep boi website khac (vi du gaigu.vc) deu la vi pham ban quyen. Original exclusive content of gaigu2.fit; any copy by other sites is copyright infringement.</span>
+</div>
+<script>
+(function(){
+  function fitOne(el){
+    if(!el) return;
+    var full = el.getAttribute('data-full');
+    if(full === null){ full = el.textContent; el.setAttribute('data-full', full); }
+    el.textContent = full;
+    if(el.scrollWidth <= el.clientWidth) return;
+    var words = full.split(' ');
+    while(words.length > 1 && el.scrollWidth > el.clientWidth){
+      words.pop();
+      el.textContent = words.join(' ');
+    }
+  }
+  function fitProductName(root){
+    var list = (root || document).querySelectorAll('.product-name');
+    for(var i=0;i<list.length;i++){ fitOne(list[i]); }
+  }
+  window.fitProductName = fitProductName;
+  function run(){ fitProductName(document); }
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(run); }
+  else { window.addEventListener('load', run); }
+  window.addEventListener('resize', function(){ clearTimeout(window.__fpnT); window.__fpnT=setTimeout(run,150); });
+})();
+</script>
+</body>
+</html>

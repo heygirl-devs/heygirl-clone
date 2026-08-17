@@ -1,0 +1,13 @@
+# dữ liệu crawl (DB, sitemap, trạng thái) — không commit
+data/*.sqlite
+data/*.sqlite-*
+data/sitemap.xml
+data/crawl_state.json
+
+# ảnh đã tải về — dung lượng lớn, không commit
+public/uploads/
+
+# log dev server
+*.log
+
+.DS_Store
