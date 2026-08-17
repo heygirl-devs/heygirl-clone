@@ -211,7 +211,12 @@ function parse_detail(string $html, int $id): array
             }
         }
     }
-    $d['gallery'] = array_slice($gallery, 0, 12);
+    // album chỉ dùng ảnh md (bản lớn), bỏ biến thể xs/sm trùng ảnh
+    $md = array_values(array_filter($gallery, static fn($g) => strpos($g, 'thumb_md_') !== false));
+    if ($md) {
+        $gallery = $md;
+    }
+    $d['gallery'] = array_slice($gallery, 0, 8);
     // attr rows
     if (preg_match_all('#<div class="attr-row"[^>]*>(.*?)</div>#s', $html, $am)) {
         foreach ($am[1] as $row) {
@@ -300,36 +305,118 @@ function dl_file(string $path): bool
     return true;
 }
 
+/** Tải song song nhiều ảnh bằng curl_multi — nhanh hơn nhiều so với tuần tự. */
+function dl_files_parallel(array $paths, int $concurrency = 6): array
+{
+    global $BASE, $UA;
+    $todo = [];
+    foreach ($paths as $p) {
+        $dest = PUBLIC_DIR . $p;
+        if (!is_file($dest) || filesize($dest) === 0) {
+            $todo[$p] = $dest;
+        }
+    }
+    if (!$todo) {
+        return ['ok' => 0, 'fail' => []];
+    }
+    if (!function_exists('curl_multi_init')) {
+        // fallback tuần tự
+        $ok = 0;
+        $fail = [];
+        foreach ($todo as $p => $dest) {
+            if (dl_file($p)) {
+                $ok++;
+            } else {
+                $fail[] = $p;
+            }
+        }
+        return ['ok' => $ok, 'fail' => $fail];
+    }
+
+    $mh = curl_multi_init();
+    $map = []; // id => ['ch'=>..., 'path'=>..., 'dest'=>...]
+    $ok = 0;
+    $fail = [];
+
+    $add = static function (string $p, string $dest) use ($mh, &$map, $BASE, $UA): void {
+        $ch = curl_init($BASE . $p);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_USERAGENT => $UA,
+            CURLOPT_REFERER => $BASE . '/',
+        ]);
+        $map[spl_object_id($ch)] = ['ch' => $ch, 'path' => $p, 'dest' => $dest];
+        curl_multi_add_handle($mh, $ch);
+    };
+
+    $runBatch = static function () use ($mh, &$map, &$ok, &$fail): void {
+        do {
+            $status = curl_multi_exec($mh, $running);
+            if ($running) {
+                curl_multi_select($mh, 0.2);
+            }
+        } while ($running > 0);
+        foreach ($map as $info) {
+            $body = curl_multi_getcontent($info['ch']);
+            $err = curl_error($info['ch']);
+            $code = curl_getinfo($info['ch'], CURLINFO_HTTP_CODE);
+            curl_multi_remove_handle($mh, $info['ch']);
+            $okBody = $err === '' && $code === 200 && is_string($body) && $body !== '' && strpos($body, '<!DOCTYPE') === false;
+            if ($okBody) {
+                $dir = dirname($info['dest']);
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                file_put_contents($info['dest'], $body);
+                $ok++;
+            } else {
+                $fail[] = $info['path'];
+            }
+        }
+        $map = [];
+    };
+
+    foreach ($todo as $p => $dest) {
+        $add($p, $dest);
+        if (count($map) >= $concurrency) {
+            $runBatch();
+        }
+    }
+    $runBatch();
+    curl_multi_close($mh);
+    return ['ok' => $ok, 'fail' => $fail];
+}
+
 function phase_images(?int $limit): void
 {
     $stmt = db()->query('SELECT image, gallery FROM products');
-    $done = 0;
-    $skip = 0;
+    $paths = [];
     while ($r = $stmt->fetch()) {
-        if ($limit !== null && $done >= $limit) {
+        if ($limit !== null && count($paths) >= $limit) {
             break;
         }
-        $paths = [];
         if ($r['image']) {
             $paths[] = $r['image'];
         }
         foreach (json_decode($r['gallery'] ?: '[]', true) ?: [] as $g) {
             $paths[] = $g;
         }
-        foreach (array_unique($paths) as $path) {
-            if (!is_file(PUBLIC_DIR . $path)) {
-                if (dl_file($path)) {
-                    $done++;
-                } else {
-                    fwrite(STDERR, "img FAIL $path\n");
-                }
-                rate_limit();
-            } else {
-                $skip++;
-            }
+    }
+    $paths = array_values(array_unique($paths));
+    fwrite(STDOUT, "images: tổng " . count($paths) . " file cần kiểm tra\n");
+    $totalOk = 0;
+    $chunks = array_chunk($paths, 200);
+    foreach ($chunks as $i => $chunk) {
+        $res = dl_files_parallel($chunk, 6);
+        $totalOk += $res['ok'];
+        fwrite(STDOUT, "images: chunk " . ($i + 1) . "/" . count($chunks) . " ok=" . $res['ok'] . " fail=" . count($res['fail']) . "\n");
+        if ($res['fail']) {
+            fwrite(STDERR, "img FAIL: " . implode(' ', array_slice($res['fail'], 0, 5)) . "\n");
         }
     }
-    fwrite(STDOUT, "== images xong: tải $done, đã có sẵn $skip\n");
+    fwrite(STDOUT, "== images xong: tải mới $totalOk file\n");
 }
 
 /* ---------------- main ---------------- */

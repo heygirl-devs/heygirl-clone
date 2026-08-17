@@ -20,11 +20,12 @@ function pagination_html(int $page, int $totalPages, string $baseUrl): string
         return '';
     }
     $links = '';
-    $add = static function (int $p, bool $current) use (&$links, $baseUrl) {
+    $sep = strpos($baseUrl, '?') !== false ? '&' : '?';
+    $add = static function (int $p, bool $current) use (&$links, $baseUrl, $sep) {
         $style = $current
             ? 'background:var(--blue);color:#fff'
             : 'background:var(--bg3);color:var(--text2)';
-        $links .= '<a href="' . e($baseUrl . ($p > 1 ? '?page=' . $p : '')) . '" style="min-width:36px;text-align:center;padding:7px 10px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:600;' . $style . '">' . $p . '</a>';
+        $links .= '<a href="' . e($baseUrl . ($p > 1 ? $sep . 'page=' . $p : '')) . '" style="min-width:36px;text-align:center;padding:7px 10px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:600;' . $style . '">' . $p . '</a>';
     };
     $add(1, $page === 1);
     if ($page > 3) {
@@ -40,7 +41,7 @@ function pagination_html(int $page, int $totalPages, string $baseUrl): string
         $add($totalPages, $page === $totalPages);
     }
     $more = $page < $totalPages
-        ? '<a href="' . e($baseUrl . '?page=' . ($page + 1)) . '" rel="next" style="display:inline-block;padding:12px 28px;background:#1565c0;color:#fff;font-size:14px;font-weight:700;border-radius:10px;text-decoration:none">Xem thêm bài đăng →</a>'
+        ? '<a href="' . e($baseUrl . $sep . 'page=' . ($page + 1)) . '" rel="next" style="display:inline-block;padding:12px 28px;background:#1565c0;color:#fff;font-size:14px;font-weight:700;border-radius:10px;text-decoration:none">Xem thêm bài đăng →</a>'
         : '';
     return '<div style="margin-top:24px;display:flex;flex-direction:column;align-items:center;gap:14px">' . $more . '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">' . $links . '</div></div>';
 }
