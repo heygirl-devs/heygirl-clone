@@ -194,8 +194,8 @@ function parse_detail(string $html, int $id): array
     }
     // breadcrumb tỉnh/quận: <a href="/gai-goi/{tinh}[/{quan}]"
     if (preg_match('#href="/gai-goi/([a-z0-9-]+)(?:/([a-z0-9-]+))?"#', $html, $bm)) {
-        $d['province_slug'] = $bm[1];
-        $d['province'] = province_name($bm[1]) ?? $bm[1];
+        $d['province_slug'] = PROVINCE_ALIASES[$bm[1]] ?? $bm[1];
+        $d['province'] = province_name($d['province_slug']) ?? $bm[1];
         $d['district'] = isset($bm[2]) ? ucwords(str_replace('-', ' ', $bm[2])) : '';
     }
     // mô tả
@@ -247,8 +247,8 @@ function phase_details(?int $limit): void
     $rows = $stmt->fetchAll();
     $done = 0;
     $upd = db()->prepare(
-        'UPDATE products SET province=:province, province_slug=:pslug, district=:district, phone=:phone,
-           address=:address, rating=:rating, review_count=:rc, has_video=:hv,
+        'UPDATE products SET province=:province, province_slug=:pslug,
+           phone=:phone, address=:address, rating=:rating, review_count=:rc, has_video=:hv,
            description=:description, gallery=:gallery, attrs=:attrs, crawled_at=:now
          WHERE id=:id'
     );
@@ -263,7 +263,7 @@ function phase_details(?int $limit): void
         $d = parse_detail($html, (int)$r['id']);
         if (!$DRY) {
             $upd->execute([
-                ':province' => $d['province'], ':pslug' => $d['province_slug'], ':district' => $d['district'],
+                ':province' => $d['province'], ':pslug' => $d['province_slug'],
                 ':phone' => $d['phone'], ':address' => $d['address'], ':rating' => $d['rating'],
                 ':rc' => $d['review_count'], ':hv' => $d['has_video'], ':description' => $d['description'],
                 ':gallery' => json_encode($d['gallery'], JSON_UNESCAPED_UNICODE),

@@ -23,7 +23,7 @@ if (!function_exists('render_layout')) {
 <header class="app-header">
     <div class="top-nav">
         <button type="button" class="gami-btn" onclick="gamiToggle(event)"><span class="gb-ico">🌟</span><span>Nhận sao đổi quà</span></button>
-        <a href="/" class="logo">gaigu</a>
+        <a href="/" class="logo">heygirl</a>
         <div style="display:flex;align-items:center;gap:10px;margin-left:auto">' . $searchBtn . '</div>
     </div>
     <div id="fhSearchBar" style="display:none;background:var(--nav);padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.06)">
@@ -37,7 +37,7 @@ if (!function_exists('render_layout')) {
 ' . $content . '
 </main>
 <footer style="margin-top:16px;border-top:1px solid var(--border);background:var(--bg2);padding:24px 16px 90px">
-    <div style="max-width:640px;margin:0 auto;font-size:13px;color:var(--text3);line-height:1.7">Gái Gú - Gái Tơ</div>
+    <div style="max-width:640px;margin:0 auto;font-size:13px;color:var(--text3);line-height:1.7">HeyGirl</div>
 </footer>
 <nav class="bottom-nav">
     <a href="/"' . $active('home') . '><span class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M9.5 21v-6h5v6"/></svg></span><span>Trang chủ</span></a>

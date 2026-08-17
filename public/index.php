@@ -41,6 +41,47 @@ $segments = $path === '' ? [] : explode('/', $path);
 $page = max(1, (int)($_GET['page'] ?? 1));
 
 $renderList = static function (string $title, string $h1, string $where, array $params, string $baseUrl, ?string $prov = null) use ($page) {
+    // chế độ "Tìm quanh đây": có user_lat/user_lng hợp lệ
+    $userLat = isset($_GET['user_lat']) && is_numeric($_GET['user_lat']) ? (float)$_GET['user_lat'] : null;
+    $userLng = isset($_GET['user_lng']) && is_numeric($_GET['user_lng']) ? (float)$_GET['user_lng'] : null;
+    $nearby = $userLat !== null && $userLng !== null
+        && $userLat >= -90 && $userLat <= 90 && $userLng >= -180 && $userLng <= 180;
+
+    if ($nearby) {
+        $stmt = db()->prepare('SELECT * FROM products WHERE ' . $where);
+        $stmt->execute($params);
+        $all = $stmt->fetchAll();
+        $scored = [];
+        foreach ($all as $row) {
+            $c = product_coords($row);
+            $scored[] = ['row' => $row, 'd' => $c ? haversine_m($userLat, $userLng, $c[0], $c[1]) : null];
+        }
+        usort($scored, static function ($a, $b) {
+            $da = $a['d'] ?? PHP_FLOAT_MAX;
+            $db = $b['d'] ?? PHP_FLOAT_MAX;
+            if ($da != $db) {
+                return $da <=> $db;
+            }
+            return $b['row']['id'] <=> $a['row']['id'];
+        });
+        $total = count($scored);
+        $totalPages = max(1, (int)ceil($total / PER_PAGE));
+        $page = min($page, $totalPages);
+        $slice = array_slice($scored, ($page - 1) * PER_PAGE, PER_PAGE);
+        $items = [];
+        $distanceById = [];
+        foreach ($slice as $x) {
+            $items[] = $x['row'];
+            if ($x['d'] !== null) {
+                $distanceById[$x['row']['id']] = $x['d'];
+            }
+        }
+        $sep = strpos($baseUrl, '?') !== false ? '&' : '?';
+        $baseUrl .= $sep . 'user_lat=' . $userLat . '&user_lng=' . $userLng;
+        render_list_page($title, $h1, $items, $page, $totalPages, $baseUrl, $prov, true, $distanceById);
+        return;
+    }
+
     $countSql = 'SELECT COUNT(*) c FROM products WHERE ' . $where;
     $stmt = db()->prepare($countSql);
     $stmt->execute($params);
@@ -55,7 +96,7 @@ $renderList = static function (string $title, string $h1, string $where, array $
 
 /* / (trang chủ) */
 if ($path === '') {
-    $renderList('Gái Gọi Gaigu Có Video', 'Gái Gọi Gaigu Có Video: gái gọi cao cấp toàn quốc, ảnh thật, clip show, kín đáo, uy tín', '1=1', [], '/', null);
+    $renderList('Gái Gọi HeyGirl Có Video', 'Gái Gọi HeyGirl Có Video: gái gọi cao cấp toàn quốc, ảnh thật, clip show, kín đáo, uy tín', '1=1', [], '/', null);
     exit;
 }
 

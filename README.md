@@ -1,11 +1,12 @@
-# gaigu-clone
+# heygirl (clone từ gaigu)
 
-Bản dựng lại (clone) MVP của site gaigu theo yêu cầu: **PHP + SQLite**, giao diện dùng CSS gốc của site (đã trích xuất), dữ liệu crawl từ site gốc.
+Bản dựng lại (clone) MVP của site gaigu — **đã đổi tên thương hiệu thành "heygirl"**: **PHP + SQLite**, giao diện dùng CSS gốc của site (đã trích xuất), dữ liệu crawl từ site gốc.
 
 ## Trạng thái & phạm vi
 
 - ✅ Trang chủ (lưới sản phẩm, phân trang)
 - ✅ Lọc theo tỉnh/thành `/gai-goi/{tinh}` (+ quận `/gai-goi/{tinh}/{quan}`)
+- ✅ **Tìm quanh đây** — nút định vị → xếp theo khoảng cách thực tế (badge "487 m" / "1.6 km" trên mỗi card, giữ nguyên bộ lọc + phân trang)
 - ✅ Chi tiết gái `/gai-goi/{id}/{slug}` (album ảnh, mô tả, bảng thuộc tính: SĐT, giá, địa chỉ, năm sinh…)
 - ✅ Tìm kiếm `/tim-kiem?q=...` (theo tên / nghệ danh / SĐT)
 - ⏳ Ngoài MVP (đang là trang placeholder): chat-sex, đổi sao, diễn đàn, đăng ký/login, bình luận, admin
@@ -13,16 +14,24 @@ Bản dựng lại (clone) MVP của site gaigu theo yêu cầu: **PHP + SQLite*
 ## Chạy
 
 ```bash
-# dev server
-php -S 127.0.0.1:8090 public/index.php
+# dev server (cổng 8080 — đã giải phóng khỏi container heygirl-nginx-1)
+php -S 127.0.0.1:8080 public/index.php
 
-# kiểm tra trạng thái DB
+# kiểm tra trạng thái DB / toạ độ
 php tools/check.php
+php tools/locations.php --status
 # xem chi tiết 1 hồ sơ
 php tools/show.php 4953
 ```
 
-Truy cập: <http://127.0.0.1:8090>
+Truy cập: <http://127.0.0.1:8080>
+
+## Tìm quanh đây (cách hoạt động)
+
+- Nút "Tìm quanh đây" (cạnh ô chọn tỉnh) dùng `navigator.geolocation`, gắn `user_lat`/`user_lng` vào URL rồi reload — giữ nguyên bộ lọc hiện tại.
+- Server tính khoảng cách **Haversine** từ vị trí bạn tới toạ độ **quận/huyện** của từng hồ sơ (fallback centroid tỉnh), sắp xếp gần → xa.
+- Bảng toạ độ: `data/gaigu.sqlite` bảng `locations` (63 centroid tỉnh tĩnh + 359 quận/huyện geocode qua Nominatim).
+- Test nhanh: `/?user_lat=10.8230989&user_lng=106.6296643`
 
 ## Crawl dữ liệu
 
@@ -39,9 +48,10 @@ Crawl **resumable**: trạng thái lưu tại `data/crawl_state.json`; ảnh đ�
 
 ## Số liệu hiện tại (lần crawl gần nhất)
 
-- **5.061 hồ sơ** (100% đã crawl chi tiết: SĐT, địa chỉ, mô tả, bảng thuộc tính, gallery)
+- **5.067 hồ sơ** (100% đã crawl chi tiết: SĐT, địa chỉ, mô tả, bảng thuộc tính, gallery)
 - **65.186 file ảnh** (~1.2 GB) tại `public/uploads/products/public/`
-- Phân bố khớp site gốc: Sài Gòn 2.254, Bình Dương 490, Hà Nội 468, Đồng Nai 255, Đà Nẵng 215…
+- Phân bố khớp site gốc: Sài Gòn 2.255, Bình Dương 490, Hà Nội 469, Đồng Nai 257, Đà Nẵng 215…
+- Toạ độ: 63 centroid tỉnh + **359/359 quận/huyện** geocode thành công
 - 11 file ảnh không tải được (đã bị xoá khỏi site gốc) — bỏ qua
 - Lưu ý: server gốc throttle tải hàng loạt → crawler đã có backoff thích ứng; nếu chạy lại, chạy `--images` 2 lần để bù file rớt
 
@@ -55,8 +65,8 @@ Ghi chú kỹ thuật từ site gốc:
 
 ```
 public/            # front controller + assets (css/js/fonts/images/uploads — CSS gốc trích xuất)
-app/               # bootstrap, db (PDO SQLite), views (layout, home, search, detail, placeholder)
-tools/             # crawl.php, check.php, show.php, test_parse.php
+app/               # bootstrap (haversine, toạ độ, card), db (PDO SQLite), views
+tools/             # crawl.php, locations.php, check.php, show.php, districts.php, slugcheck.php
 data/              # gaigu.sqlite + sitemap.xml + crawl_state.json (không commit)
 ```
 
@@ -64,3 +74,4 @@ data/              # gaigu.sqlite + sitemap.xml + crawl_state.json (không commi
 
 - Export **HAR** từ site gốc (F12 → Network → login, gửi đánh giá, chat-sex, đổi sao…) để tái dựng đúng hợp đồng API `/api-internal-v2` — hiện tại route này trả 403 nếu không có context/session.
 - Tài khoản test nếu các luồng trên cần đăng nhập.
+- Muốn đổi cổng chạy: dừng `php -S` cũ rồi `php -S 127.0.0.1:8080 public/index.php` (nếu 8080 bận do heygirl-nginx-1: `docker start heygirl-nginx-1` để chạy lại, hoặc `docker stop` để trả cổng).

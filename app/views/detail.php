@@ -29,16 +29,16 @@ function render_detail_page(array $p): void
             $thumbs .= '<img src="' . e($img) . '" alt="thumb ' . ($i + 1) . '" loading="lazy" decoding="async" class="album-thumb" data-idx="' . $i . '" style="flex:0 0 auto;width:54px;height:54px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;opacity:0.6;transition:all .15s">';
         }
         $galleryHtml = '<div style="margin-bottom:14px">'
-            . '<div style="border-radius:10px;overflow:hidden;background:var(--bg3);cursor:zoom-in" onclick="gaiguLightbox(\'' . e($main) . '\')"><img src="' . e($main) . '" id="detail-main-img" alt="' . e($p['name']) . '" style="width:100%;display:block;aspect-ratio:6/9;object-fit:cover"></div>'
+            . '<div style="border-radius:10px;overflow:hidden;background:var(--bg3);cursor:zoom-in" onclick="heygirlLightbox(\'' . e($main) . '\')"><img src="' . e($main) . '" id="detail-main-img" alt="' . e($p['name']) . '" style="width:100%;display:block;aspect-ratio:6/9;object-fit:cover"></div>'
             . '<div id="album-wrap" style="margin-top:8px;overflow-x:auto;display:flex;gap:6px;padding-bottom:4px">' . $thumbs . '</div></div>'
-            . '<div id="gaigu-lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out" onclick="this.style.display=\'none\'"><img src="" id="gaigu-lightbox-img" style="max-width:94vw;max-height:92vh;border-radius:8px"></div>'
+            . '<div id="heygirl-lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out" onclick="this.style.display=\'none\'"><img src="" id="heygirl-lightbox-img" style="max-width:94vw;max-height:92vh;border-radius:8px"></div>'
             . '<script>'
-            . 'var gaiguAlbumMain=document.getElementById("detail-main-img");'
+            . 'var heygirlAlbumMain=document.getElementById("detail-main-img");'
             . 'document.querySelectorAll(".album-thumb").forEach(function(t){ t.addEventListener("click", function(){'
-            . 'var src=t.src; gaiguAlbumMain.src=src;'
+            . 'var src=t.src; heygirlAlbumMain.src=src;'
             . 'document.querySelectorAll(".album-thumb").forEach(function(x){ x.style.opacity="0.6"; x.style.borderColor="transparent"; });'
             . 't.style.opacity="1"; t.style.borderColor="var(--blue)"; }); });'
-            . 'function gaiguLightbox(src){ var lb=document.getElementById("gaigu-lightbox"); document.getElementById("gaigu-lightbox-img").src=src; lb.style.display="flex"; }'
+            . 'function heygirlLightbox(src){ var lb=document.getElementById("heygirl-lightbox"); document.getElementById("heygirl-lightbox-img").src=src; lb.style.display="flex"; }'
             . '</script>';
     }
 

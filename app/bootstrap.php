@@ -44,8 +44,18 @@ const PROVINCES = [
 
 function province_name(string $slug): ?string
 {
-    return PROVINCES[$slug] ?? null;
+    if (isset(PROVINCES[$slug])) {
+        return PROVINCES[$slug];
+    }
+    // slug đúng chính tả từ breadcrumb detail -> slug chuẩn của site (có lỗi chính tả ở select)
+    return PROVINCES[PROVINCE_ALIASES[$slug] ?? $slug] ?? null;
 }
+
+/** Ánh xạ slug chuẩn -> slug select của site (n-giang, lai là slug gốc dùng cho URL). */
+const PROVINCE_ALIASES = [
+    'an-giang' => 'n-giang',
+    'gia-lai' => 'lai',
+];
 
 function province_counts(): array
 {
@@ -57,6 +67,64 @@ function province_counts(): array
         }
     }
     return $counts;
+}
+
+/* ---------- Toạ độ & khoảng cách (Tìm quanh đây) ---------- */
+
+function loc_key(string $prov, string $dist): string
+{
+    return strtolower(trim($prov)) . '|' . strtolower(trim($dist));
+}
+
+/** Cache bảng locations (province centroid + district geocode). */
+function locations_cache(): array
+{
+    static $loc = null;
+    if ($loc === null) {
+        $loc = [];
+        foreach (db()->query('SELECT key, lat, lng FROM locations') as $r) {
+            $loc[$r['key']] = [(float)$r['lat'], (float)$r['lng']];
+        }
+    }
+    return $loc;
+}
+
+/** Toạ độ của 1 hồ sơ: ưu tiên quận/huyện, fallback tỉnh; null nếu chưa có. */
+function product_coords(array $p): ?array
+{
+    $loc = locations_cache();
+    if (($p['district'] ?? '') !== '') {
+        $k = loc_key($p['province_slug'], $p['district']);
+        if (isset($loc[$k])) {
+            return $loc[$k];
+        }
+    }
+    if (($p['province_slug'] ?? '') !== '') {
+        $k = loc_key($p['province_slug'], '');
+        if (isset($loc[$k])) {
+            return $loc[$k];
+        }
+    }
+    return null;
+}
+
+/** Khoảng cách Haversine (mét) giữa 2 toạ độ. */
+function haversine_m(float $lat1, float $lng1, float $lat2, float $lng2): float
+{
+    $R = 6371000.0;
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLng = deg2rad($lng2 - $lng1);
+    $a = sin($dLat / 2) ** 2 + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLng / 2) ** 2;
+    return 2 * $R * asin(sqrt($a));
+}
+
+/** Định dạng khoảng cách như site gốc: "487 m" / "1.6 km". */
+function fmt_distance(float $m): string
+{
+    if ($m < 1000) {
+        return (string)round($m) . ' m';
+    }
+    return rtrim(rtrim(number_format($m / 1000, 1), '0'), '.') . ' km';
 }
 
 function stars_html(float $rating): string
@@ -71,7 +139,7 @@ function stars_html(float $rating): string
     return $html;
 }
 
-function card_html(array $p, bool $lazy = true): string
+function card_html(array $p, bool $lazy = true, ?float $dist = null): string
 {
     $img = $p['image'] ?: '';
     $href = '/gai-goi/' . (int)$p['id'] . '/' . e($p['slug']);
@@ -82,6 +150,12 @@ function card_html(array $p, bool $lazy = true): string
     $views = e($p['views'] ?: '');
     $stars = stars_html((float)$p['rating']);
     $load = $lazy ? 'loading="lazy"' : 'loading="eager" fetchpriority="high"';
+    $badge = '';
+    if ($dist !== null) {
+        $badge = '<span style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);padding:3px 8px;border-radius:20px;color:#fff;font-size:11px;font-weight:600">'
+            . '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> '
+            . fmt_distance($dist) . '</span>';
+    }
     $video = (int)$p['has_video'] ? '
         <div style="position:absolute;bottom:6px;right:6px">
             <span style="display:flex;align-items:center;justify-content:center" title="Có video">
@@ -94,7 +168,7 @@ function card_html(array $p, bool $lazy = true): string
     <div style="position:relative;overflow:hidden">
         <div class="img-wrap">
             <img src="{$img}" alt="{$name}" {$load} decoding="async" style="width:100%;height:100%;object-fit:cover;display:block">
-        </div>{$video}
+        </div>{$badge}{$video}
     </div>
     <div class="product-info">
         <div class="product-name">{$name}</div>
