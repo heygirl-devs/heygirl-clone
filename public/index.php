@@ -41,6 +41,23 @@ $segments = $path === '' ? [] : explode('/', $path);
 $page = max(1, (int)($_GET['page'] ?? 1));
 
 $renderList = static function (string $title, string $h1, string $where, array $params, string $baseUrl, ?string $prov = null) use ($page) {
+    // Sắp xếp: ?sort=price-asc | price-desc | rating | new (mặc định)
+    $sort = (string)($_GET['sort'] ?? 'new');
+    $orderBy = match ($sort) {
+        'price-asc'  => 'ORDER BY price_num ASC, id DESC',
+        'price-desc' => 'ORDER BY price_num DESC, id DESC',
+        'rating'     => 'ORDER BY rating DESC, review_count DESC, id DESC',
+        default      => 'ORDER BY id DESC',
+    };
+    $baseUrlSort = $baseUrl;
+    if (strpos($baseUrlSort, '?') === false) {
+        $baseUrlSort .= '?';
+    } elseif (!str_ends_with($baseUrlSort, '&') && !str_ends_with($baseUrlSort, '?')) {
+        $baseUrlSort .= '&';
+    }
+    $baseUrlSort .= 'sort=' . $sort;
+    $sort = $sort; // giữ nguyên để view dùng được (nếu cần)
+
     // chế độ "Tìm quanh đây": có user_lat/user_lng hợp lệ
     $userLat = isset($_GET['user_lat']) && is_numeric($_GET['user_lat']) ? (float)$_GET['user_lat'] : null;
     $userLng = isset($_GET['user_lng']) && is_numeric($_GET['user_lng']) ? (float)$_GET['user_lng'] : null;
@@ -88,10 +105,10 @@ $renderList = static function (string $title, string $h1, string $where, array $
     $total = (int)$stmt->fetchColumn();
     $totalPages = max(1, (int)ceil($total / PER_PAGE));
     $page = min($page, $totalPages);
-    $sql = 'SELECT * FROM products WHERE ' . $where . ' ORDER BY id DESC LIMIT ' . PER_PAGE . ' OFFSET ' . (($page - 1) * PER_PAGE);
+    $sql = 'SELECT * FROM products WHERE ' . $where . ' ' . $orderBy . ' LIMIT ' . PER_PAGE . ' OFFSET ' . (($page - 1) * PER_PAGE);
     $stmt = db()->prepare($sql);
     $stmt->execute($params);
-    render_list_page($title, $h1, $stmt->fetchAll(), $page, $totalPages, $baseUrl, $prov);
+    render_list_page($title, $h1, $stmt->fetchAll(), $page, $totalPages, $baseUrlSort, $prov);
 };
 
 /* / (trang chủ) */

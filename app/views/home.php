@@ -1,6 +1,25 @@
 <?php
 /** Trang danh sách: filter tỉnh/thành + lưới sản phẩm + phân trang. */
 
+function sort_options_html(?string $selected): string
+{
+    $s = $selected ?? 'new';
+    $items = [
+        'new'        => 'Mới nhất',
+        'price-asc'  => 'Giá thấp → cao',
+        'price-desc' => 'Giá cao → thấp',
+        'rating'     => 'Đánh giá cao',
+    ];
+    $cur = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_QUERY) ?: '';
+    parse_str($cur, $q);
+    $opt = '<option value="">Sắp xếp...</option>';
+    foreach ($items as $k => $label) {
+        $q['sort'] = $k;
+        $opt .= '<option value="/?' . http_build_query($q) . '"' . ($s === $k ? ' selected' : '') . '>' . e($label) . '</option>';
+    }
+    return $opt;
+}
+
 function province_select_html(?string $selected): string
 {
     $counts = province_counts();
@@ -33,6 +52,7 @@ function findNearby(){
 </script>';
     return '<div class="fhrow">'
         . '<div class="fhprov-sel"><select name="tinh" onchange="location.href=this.value;">' . $opts . '</select></div>'
+        . '<div class="fhsort"><select onchange="location.href=this.value;">' . sort_options_html($selectedSort ?? null) . '</select></div>'
         . '<button type="button" id="nearbyBtn" onclick="findNearby()" class="fhnear">' . $pin . '<span class="fhnear-txt">Tìm quanh đây</span></button>'
         . '</div>' . $msg . $js;
 }

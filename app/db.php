@@ -43,4 +43,29 @@ CREATE INDEX IF NOT EXISTS idx_products_province ON products(province_slug, id D
 CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);
 SQL;
     db()->exec($sql);
+
+    // migration nhẹ (idempotent): price_num + status — chạy lại an toàn mỗi lần
+    $cols = [];
+    foreach (db()->query('PRAGMA table_info(products)') as $c) {
+        $cols[$c['name']] = true;
+    }
+    if (!isset($cols['price_num'])) {
+        db()->exec('ALTER TABLE products ADD COLUMN price_num INTEGER');
+    }
+    if (!isset($cols['status'])) {
+        db()->exec("ALTER TABLE products ADD COLUMN status TEXT NOT NULL DEFAULT 'active'");
+    }
+    // backfill price_num từ price text (chỉ dòng còn thiếu) — cần parse_price_to_num từ bootstrap
+    if (function_exists('parse_price_to_num')) {
+        $rows = db()->query("SELECT id, price FROM products WHERE price_num IS NULL AND price <> ''")->fetchAll(PDO::FETCH_ASSOC);
+        if ($rows) {
+            $upd = db()->prepare('UPDATE products SET price_num = ? WHERE id = ?');
+            foreach ($rows as $r) {
+                $n = parse_price_to_num($r['price']);
+                if ($n !== null) {
+                    $upd->execute([$n, (int)$r['id']]);
+                }
+            }
+        }
+    }
 }
